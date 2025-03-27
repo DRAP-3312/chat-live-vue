@@ -2,7 +2,7 @@
 import { ref } from "vue";
 
 const isChatOpen = ref(false);
-const message = ref('');
+const message = ref("");
 
 const toggleChat = () => {
   isChatOpen.value = !isChatOpen.value;
@@ -11,54 +11,60 @@ const toggleChat = () => {
 const sendMessage = () => {
   if (message.value.trim()) {
     // Aquí iría la lógica para enviar el mensaje
-    message.value = '';
+    message.value = "";
   }
 };
 </script>
 
 <template>
-  <div class="chat-container">
-    <button
-      class="chat-button"
-      @click="toggleChat"
-      :class="{ active: isChatOpen }"
-    >
-      <span v-if="!isChatOpen">💬</span>
-      <span v-else>✕</span>
-    </button>
+  <div class="vue-chat-widget">
+    <div class="chat-container">
+      <button
+        class="chat-button"
+        @click="toggleChat"
+        :class="{ active: isChatOpen }"
+      >
+        <span v-if="!isChatOpen">💬</span>
+        <span v-else>✕</span>
+      </button>
 
-    <div v-if="isChatOpen" class="chat-panel">
-      <div class="chat-header">
-        <h3>Hola! 👋</h3>
-        <p class="subtitle">Start a chat. We're here to help you 24/7</p>
-      </div>
-      <div class="chat-messages">
-        <div class="message">
-          <p>Claro, ¿de qué te gustaría que hablemos? Puedo compartir información, responder preguntas o simplemente charlar sobre un tema de tu interés.</p>
+      <div v-if="isChatOpen" class="chat-panel">
+        <div class="chat-header">
+          <h3>Hola! 👋</h3>
+          <p class="subtitle">Start a chat. We're here to help you 24/7</p>
         </div>
-        <div class="quick-replies">
-          <button class="quick-reply-btn">dime algo</button>
-          <button class="quick-reply-btn">otra cosa</button>
-          <button class="quick-reply-btn">hola</button>
+        <div class="chat-messages">
+          <div class="message">
+            <p>
+              Claro, ¿de qué te gustaría que hablemos? Puedo compartir
+              información, responder preguntas o simplemente charlar sobre un
+              tema de tu interés.
+            </p>
+          </div>
+          <div class="quick-replies">
+            <button class="quick-reply-btn">dime algo</button>
+            <button class="quick-reply-btn">otra cosa</button>
+            <button class="quick-reply-btn">hola</button>
+          </div>
         </div>
-      </div>
-      <div class="chat-input">
-        <input 
-          type="text" 
-          v-model="message"
-          placeholder="Empieza a preguntar..." 
-          @keyup.enter="sendMessage"
-        />
-        <button class="send-button" @click="sendMessage">
-          ➤
-        </button>
+        <div class="chat-input">
+          <input
+            type="text"
+            v-model="message"
+            placeholder="Empieza a preguntar..."
+            @keyup.enter="sendMessage"
+          />
+          <button class="send-button" @click="sendMessage">➤</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
-:host {
+/* Esto funcionará tanto para el componente web (build) como para desarrollo local */
+:host,
+.vue-chat-widget {
   display: block;
 }
 
