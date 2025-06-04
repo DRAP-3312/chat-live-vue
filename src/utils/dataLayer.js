@@ -5,6 +5,23 @@ export function pushToDataLayer(eventObject) {
     }
 }
 
+// Initialize Google Analytics with tracking ID
+export function initializeGoogleAnalytics(trackingId) {
+    if (!trackingId) return;
+    
+    // Create dataLayer if it doesn't exist
+    window.dataLayer = window.dataLayer || [];
+    
+    // Initialize gtag
+    window.gtag = function() {
+        window.dataLayer.push(arguments);
+    }
+    
+    // Configure gtag
+    window.gtag('js', new Date());
+    window.gtag('config', trackingId);
+}
+
 // Event names as constants to avoid typos
 export const CHAT_EVENTS = {
     SESSION_STARTED: 'chat_session_started',

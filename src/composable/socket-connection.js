@@ -3,7 +3,7 @@ import { Manager } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import { useChatMessages } from "./useMessages";
 import { get_utm } from "./get_utm";
-import { pushToDataLayer, CHAT_EVENTS } from "../utils/dataLayer";
+import { pushToDataLayer, CHAT_EVENTS, initializeGoogleAnalytics } from "../utils/dataLayer";
 import { useSessionMetrics } from "./useSessionMetrics";
 import { areObjectsDeepEqual } from "./compare-objects";
 import { useSound } from "./useSound";
@@ -13,7 +13,8 @@ export const useSocketConnection = (
   idAgent,
   api_key = "",
   nameSpace,
-  soundName = "sound1"
+  soundName = "sound1",
+  gaTrackingId = ""
 ) => {
   const socket = ref(null);
   const manager = ref(null);
@@ -28,18 +29,21 @@ export const useSocketConnection = (
 
   // Obtener o generar un UUID persistente para el usuario
   const getUserUUID = () => {
-  let userUUID = localStorage.getItem("userUUID");
-  if (!userUUID) {
-    userUUID = uuidv4();
-    localStorage.setItem("userUUID", userUUID);
+    let userUUID = localStorage.getItem("userUUID");
+    if (!userUUID) {
+      userUUID = uuidv4();
+      localStorage.setItem("userUUID", userUUID);
 
-    // Track new session creation
-    pushToDataLayer({
-      event: CHAT_EVENTS.SESSION_STARTED,
-      chat_session_id: userUUID,
-      chat_source: "user_initiated",
-    });
-  }
+      // Track new session creation
+      if (gaTrackingId) {
+        pushToDataLayer({
+          event: CHAT_EVENTS.SESSION_STARTED,
+          chat_session_id: userUUID,
+          chat_source: "user_initiated",
+          chat_agent_id: idAgent
+        });
+      }
+    }
     return userUUID;
   };
 
@@ -47,35 +51,58 @@ export const useSocketConnection = (
     const userUUID = getUserUUID();
     const idThread = userUUID;
 
+    // Initialize Google Analytics if tracking ID is provided
+    if (gaTrackingId) {
+      initializeGoogleAnalytics(gaTrackingId);
+    }
+
     manager.value = new Manager(socketUrl, {
-    transports: ["websocket", "polling"],
-    reconnection: true,
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000,
-    query: {
-      idOwner: userUUID,
-      api_key: api_key,
-      idClient: userUUID,
-      instance: idAgent,
-    },
-  });
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      query: {
+        idOwner: userUUID,
+        api_key: api_key,
+        idClient: userUUID,
+        instance: idAgent,
+      },
+    });
 
     socket.value = manager.value.socket(nameSpace);
 
     socket.value.on("connect", () => {
       socket.value.emit(
-      "connected-chat",
-      { userUUID: idThread, agentId: idAgent },
-      (val) => {
-        if (val.messages) {
-          setValueMessages(val.messages);
+        "connected-chat",
+        { userUUID: idThread, agentId: idAgent },
+        (val) => {
+          if (val.messages) {
+            setValueMessages(val.messages);
+          }
         }
+      );
+
+      // Track connection event
+      if (gaTrackingId) {
+        pushToDataLayer({
+          event: CHAT_EVENTS.SESSION_STARTED,
+          chat_session_id: userUUID,
+          chat_agent_id: idAgent,
+          chat_connection_status: "connected"
+        });
       }
-    );
-  });
+    });
 
     socket.value.on("disconnect", () => {
-      // Manejar desconexión si es necesario
+      // Track disconnection event
+      if (gaTrackingId) {
+        pushToDataLayer({
+          event: CHAT_EVENTS.SESSION_STARTED,
+          chat_session_id: userUUID,
+          chat_agent_id: idAgent,
+          chat_connection_status: "disconnected"
+        });
+      }
     });
 
     socket.value.on("response", async (val) => {
@@ -85,6 +112,17 @@ export const useSocketConnection = (
           ? custom_style.value.soundName
           : soundName ?? "sound1"
       );
+
+      // Track bot response event
+      if (gaTrackingId) {
+        pushToDataLayer({
+          event: CHAT_EVENTS.MESSAGE_SENT,
+          chat_session_id: userUUID,
+          chat_agent_id: idAgent,
+          chat_message_type: "bot_response",
+          chat_message_length: val.content?.length || 0
+        });
+      }
     });
   };
 

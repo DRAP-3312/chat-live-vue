@@ -10,6 +10,7 @@ const ChatElement = defineCustomElement(Chat, {
     nameSpace: String,
     welcomeMessage: String,
     iconButton: String,
+    gaTrackingId: String,
     // Welcome message colors
     welcomeBackgroundColor: String,
     welcomeTextColor: String,

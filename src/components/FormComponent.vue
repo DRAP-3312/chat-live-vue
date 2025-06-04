@@ -65,7 +65,7 @@ import SvgComponent from "./SvgComponent.vue";
 import ChatBubbleComponent from "./ChatBubbleComponent.vue";
 import { useChatMessages } from "../composable/useMessages";
 import { useSocketConnection } from "../composable/socket-connection";
-import { pushToDataLayer, CHAT_EVENTS } from "../utils/dataLayer";
+import { pushToDataLayer, CHAT_EVENTS, initializeGoogleAnalytics } from "../utils/dataLayer";
 
 const props = defineProps({
   idAgent: {
@@ -75,6 +75,10 @@ const props = defineProps({
   api_key: {
     type: String,
     required: true,
+  },
+  gaTrackingId: {
+    type: String,
+    default: '',
   },
   socket: {
     type: Object,
@@ -201,13 +205,43 @@ onMounted(() => {
     textareaRef.value.focus();
   }
 
+  // Initialize Google Analytics if tracking ID is provided
+  if (props.gaTrackingId) {
+    initializeGoogleAnalytics(props.gaTrackingId);
+    
+    // Track session started event
+    pushToDataLayer({
+      event: CHAT_EVENTS.SESSION_STARTED,
+      chat_session_id: id,
+      chat_agent_id: props.idAgent
+    });
+  }
+
   setTimeout(() => {
     isVisible.value = true;
+    
+    // Track widget opened event
+    if (props.gaTrackingId) {
+      pushToDataLayer({
+        event: CHAT_EVENTS.WIDGET_OPENED,
+        chat_session_id: id,
+        chat_agent_id: props.idAgent
+      });
+    }
   }, 100);
 });
 
 const closePanel = () => {
   isVisible.value = false;
+  
+  // Track widget closed event
+  if (props.gaTrackingId) {
+    pushToDataLayer({
+      event: CHAT_EVENTS.WIDGET_CLOSED,
+      chat_session_id: id,
+      chat_agent_id: props.idAgent
+    });
+  }
 };
 </script>
 

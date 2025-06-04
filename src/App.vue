@@ -23,6 +23,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  gaTrackingId: {
+    type: String,
+    default: '',
+  },
   welcomeMessage: {
     type: String,
     required: true,
@@ -124,7 +128,8 @@ const { socket: chatSocket } = useSocketConnection(
   props.idAgent,
   props.api_key,
   props.nameSpace,
-  props.soundName
+  props.soundName,
+  props.gaTrackingId
 );
 
 const toggleChat = () => {
@@ -221,6 +226,11 @@ watch(
 
 onMounted(() => {
   setupTimers();
+
+  // Initialize Google Analytics if tracking ID is provided
+  if (props.gaTrackingId) {
+    initializeGoogleAnalytics(props.gaTrackingId);
+  }
 
   unwatchChatOpen = watch(openChat, (newValue) => {
     if (newValue) {
@@ -383,6 +393,7 @@ onMounted(() => {
 
     <div v-if="openChat" class="form-container">
       <FormComponent
+        :gaTrackingId="props.gaTrackingId"
         :socketUrl="props.socketUrl"
         :nameSpace="props.nameSpace"
         :idAgent="props.idAgent"
