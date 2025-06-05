@@ -3,7 +3,7 @@ import { Manager } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import { useChatMessages } from "./useMessages";
 import { get_utm } from "./get_utm";
-import { pushToDataLayer, CHAT_EVENTS, initializeGoogleAnalytics, sendGAEvent } from "../utils/dataLayer";
+import { initializeGoogleAnalytics, sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { useSessionMetrics } from "./useSessionMetrics";
 import { areObjectsDeepEqual } from "./compare-objects";
 import { useSound } from "./useSound";
@@ -35,13 +35,13 @@ export const useSocketConnection = (
       localStorage.setItem("userUUID", userUUID);
 
       // Track new session creation
-      if (gaTrackingId) {
-        sendGAEvent(CHAT_EVENTS.SESSION_STARTED, {
-          chat_session_id: userUUID,
-          chat_source: "user_initiated",
-          chat_agent_id: idAgent
-        });
-      }
+      // if (gaTrackingId) {
+      //   sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
+      //     chat_session_id: userUUID,
+      //     chat_source: "user_initiated",
+      //     chat_agent_id: idAgent
+      //   });
+      // }
     }
     return userUUID;
   };
@@ -82,24 +82,24 @@ export const useSocketConnection = (
       );
 
       // Track connection event
-      if (gaTrackingId) {
-        sendGAEvent(CHAT_EVENTS.SESSION_STARTED, {
-          chat_session_id: userUUID,
-          chat_agent_id: idAgent,
-          chat_connection_status: "connected"
-        });
-      }
+      // if (gaTrackingId) {
+      //   sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
+      //     chat_session_id: userUUID,
+      //     chat_agent_id: idAgent,
+      //     chat_connection_status: "connected"
+      //   });
+      // }
     });
 
     socket.value.on("disconnect", () => {
       // Track disconnection event
-      if (gaTrackingId) {
-        sendGAEvent(CHAT_EVENTS.SESSION_STARTED, {
-          chat_session_id: userUUID,
-          chat_agent_id: idAgent,
-          chat_connection_status: "disconnected"
-        });
-      }
+      // if (gaTrackingId) {
+      //   sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
+      //     chat_session_id: userUUID,
+      //     chat_agent_id: idAgent,
+      //     chat_connection_status: "disconnected"
+      //   });
+      // }
     });
 
     socket.value.on("response", async (val) => {
@@ -111,14 +111,14 @@ export const useSocketConnection = (
       );
 
       // Track bot response event
-      if (gaTrackingId) {
-        sendGAEvent(CHAT_EVENTS.MESSAGE_SENT, {
-          chat_session_id: userUUID,
-          chat_agent_id: idAgent,
-          chat_message_type: "bot_response",
-          chat_message_length: val.content?.length || 0
-        });
-      }
+      // if (gaTrackingId) {
+      //   sendFlexibleEvent(CHAT_EVENTS.MESSAGE_SENT, {
+      //     chat_session_id: userUUID,
+      //     chat_agent_id: idAgent,
+      //     chat_message_type: "bot_response",
+      //     chat_message_length: val.content?.length || 0
+      //   });
+      // }
     });
   };
 

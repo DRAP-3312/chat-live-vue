@@ -5,10 +5,9 @@ import SvgComponent from "./components/SvgComponent.vue";
 import { useSocketConnection } from "./composable/socket-connection";
 import { useChatMessages } from "./composable/useMessages";
 import {
-  pushToDataLayer,
-  CHAT_EVENTS,
   initializeGoogleAnalytics,
-  sendGAEvent,
+  sendFlexibleEvent,
+  CHAT_EVENTS,
 } from "./utils/dataLayer";
 
 const props = defineProps({
@@ -149,11 +148,11 @@ const toggleChat = () => {
 
   // Track widget open/close event
   if (!openChat.value) {
-    sendGAEvent(CHAT_EVENTS.WIDGET_OPENED, {
+    sendFlexibleEvent(CHAT_EVENTS.WIDGET_OPENED, {
       chat_is_expanded: true,
     });
   } else {
-    sendGAEvent(CHAT_EVENTS.WIDGET_CLOSED, {
+    sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
       chat_is_expanded: false,
     });
   }
