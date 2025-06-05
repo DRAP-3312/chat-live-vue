@@ -65,7 +65,7 @@ import SvgComponent from "./SvgComponent.vue";
 import ChatBubbleComponent from "./ChatBubbleComponent.vue";
 import { useChatMessages } from "../composable/useMessages";
 import { useSocketConnection } from "../composable/socket-connection";
-import { pushToDataLayer, CHAT_EVENTS, initializeGoogleAnalytics } from "../utils/dataLayer";
+import { pushToDataLayer, CHAT_EVENTS, initializeGoogleAnalytics, sendGAEvent } from "../utils/dataLayer";
 
 const props = defineProps({
   idAgent: {
@@ -189,8 +189,7 @@ const sendMessage = () => {
     );
 
     // Track message sent event
-    pushToDataLayer({
-      event: CHAT_EVENTS.MESSAGE_SENT,
+    sendGAEvent(CHAT_EVENTS.MESSAGE_SENT, {
       chat_session_id: id,
       chat_message_length: message.value.trim().length,
       chat_message_type: "text",
@@ -210,8 +209,7 @@ onMounted(() => {
     initializeGoogleAnalytics(props.gaTrackingId);
     
     // Track session started event
-    pushToDataLayer({
-      event: CHAT_EVENTS.SESSION_STARTED,
+    sendGAEvent(CHAT_EVENTS.SESSION_STARTED, {
       chat_session_id: id,
       chat_agent_id: props.idAgent
     });
@@ -222,8 +220,7 @@ onMounted(() => {
     
     // Track widget opened event
     if (props.gaTrackingId) {
-      pushToDataLayer({
-        event: CHAT_EVENTS.WIDGET_OPENED,
+      sendGAEvent(CHAT_EVENTS.WIDGET_OPENED, {
         chat_session_id: id,
         chat_agent_id: props.idAgent
       });
@@ -236,8 +233,7 @@ const closePanel = () => {
   
   // Track widget closed event
   if (props.gaTrackingId) {
-    pushToDataLayer({
-      event: CHAT_EVENTS.WIDGET_CLOSED,
+    sendGAEvent(CHAT_EVENTS.WIDGET_CLOSED, {
       chat_session_id: id,
       chat_agent_id: props.idAgent
     });

@@ -4,7 +4,12 @@ import FormComponent from "./components/FormComponent.vue";
 import SvgComponent from "./components/SvgComponent.vue";
 import { useSocketConnection } from "./composable/socket-connection";
 import { useChatMessages } from "./composable/useMessages";
-import { pushToDataLayer, CHAT_EVENTS } from "./utils/dataLayer";
+import {
+  pushToDataLayer,
+  CHAT_EVENTS,
+  initializeGoogleAnalytics,
+  sendGAEvent,
+} from "./utils/dataLayer";
 
 const props = defineProps({
   socketUrl: {
@@ -25,7 +30,7 @@ const props = defineProps({
   },
   gaTrackingId: {
     type: String,
-    default: '',
+    default: "",
   },
   welcomeMessage: {
     type: String,
@@ -144,13 +149,11 @@ const toggleChat = () => {
 
   // Track widget open/close event
   if (!openChat.value) {
-    pushToDataLayer({
-      event: CHAT_EVENTS.WIDGET_OPENED,
+    sendGAEvent(CHAT_EVENTS.WIDGET_OPENED, {
       chat_is_expanded: true,
     });
   } else {
-    pushToDataLayer({
-      event: CHAT_EVENTS.WIDGET_CLOSED,
+    sendGAEvent(CHAT_EVENTS.WIDGET_CLOSED, {
       chat_is_expanded: false,
     });
   }
@@ -222,6 +225,16 @@ watch(
     }
   },
   { deep: true }
+);
+
+// Watch para inicializar GA4 si el trackingId cambia y es válido
+watch(
+  () => props.gaTrackingId,
+  (newVal, oldVal) => {
+    if (newVal) {
+      initializeGoogleAnalytics(newVal);
+    }
+  }
 );
 
 onMounted(() => {

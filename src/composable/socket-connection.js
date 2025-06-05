@@ -3,7 +3,7 @@ import { Manager } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import { useChatMessages } from "./useMessages";
 import { get_utm } from "./get_utm";
-import { pushToDataLayer, CHAT_EVENTS, initializeGoogleAnalytics } from "../utils/dataLayer";
+import { pushToDataLayer, CHAT_EVENTS, initializeGoogleAnalytics, sendGAEvent } from "../utils/dataLayer";
 import { useSessionMetrics } from "./useSessionMetrics";
 import { areObjectsDeepEqual } from "./compare-objects";
 import { useSound } from "./useSound";
@@ -36,8 +36,7 @@ export const useSocketConnection = (
 
       // Track new session creation
       if (gaTrackingId) {
-        pushToDataLayer({
-          event: CHAT_EVENTS.SESSION_STARTED,
+        sendGAEvent(CHAT_EVENTS.SESSION_STARTED, {
           chat_session_id: userUUID,
           chat_source: "user_initiated",
           chat_agent_id: idAgent
@@ -84,8 +83,7 @@ export const useSocketConnection = (
 
       // Track connection event
       if (gaTrackingId) {
-        pushToDataLayer({
-          event: CHAT_EVENTS.SESSION_STARTED,
+        sendGAEvent(CHAT_EVENTS.SESSION_STARTED, {
           chat_session_id: userUUID,
           chat_agent_id: idAgent,
           chat_connection_status: "connected"
@@ -96,8 +94,7 @@ export const useSocketConnection = (
     socket.value.on("disconnect", () => {
       // Track disconnection event
       if (gaTrackingId) {
-        pushToDataLayer({
-          event: CHAT_EVENTS.SESSION_STARTED,
+        sendGAEvent(CHAT_EVENTS.SESSION_STARTED, {
           chat_session_id: userUUID,
           chat_agent_id: idAgent,
           chat_connection_status: "disconnected"
@@ -115,8 +112,7 @@ export const useSocketConnection = (
 
       // Track bot response event
       if (gaTrackingId) {
-        pushToDataLayer({
-          event: CHAT_EVENTS.MESSAGE_SENT,
+        sendGAEvent(CHAT_EVENTS.MESSAGE_SENT, {
           chat_session_id: userUUID,
           chat_agent_id: idAgent,
           chat_message_type: "bot_response",
