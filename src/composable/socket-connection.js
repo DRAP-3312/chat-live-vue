@@ -1,9 +1,13 @@
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from "vue";
 import { Manager } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import { useChatMessages } from "./useMessages";
 import { get_utm } from "./get_utm";
-import { initializeGoogleAnalytics, sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
+import {
+  initializeGoogleAnalytics,
+  sendFlexibleEvent,
+  CHAT_EVENTS,
+} from "../utils/dataLayer";
 import { useSessionMetrics } from "./useSessionMetrics";
 import { areObjectsDeepEqual } from "./compare-objects";
 import { useSound } from "./useSound";
@@ -23,7 +27,8 @@ export const useSocketConnection = (
   const metricsInterval = ref(null);
   const lastPath = ref("");
 
-  const { setValueMessages, addMessage, setCustomStyle, custom_style } = useChatMessages();
+  const { setValueMessages, addMessage, setCustomStyle, custom_style } =
+    useChatMessages();
   const { playSound } = useSound();
   const { sessionInfo } = useSessionMetrics();
 
@@ -34,14 +39,13 @@ export const useSocketConnection = (
       userUUID = uuidv4();
       localStorage.setItem("userUUID", userUUID);
 
-      // Track new session creation
-      // if (gaTrackingId) {
-      //   sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
-      //     chat_session_id: userUUID,
-      //     chat_source: "user_initiated",
-      //     chat_agent_id: idAgent
-      //   });
-      // }
+      if (gaTrackingId) {
+        sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
+          chat_session_id: userUUID,
+          chat_source: "user_initiated",
+          chat_agent_id: idAgent,
+        });
+      }
     }
     return userUUID;
   };
@@ -80,27 +84,9 @@ export const useSocketConnection = (
           }
         }
       );
-
-      // Track connection event
-      // if (gaTrackingId) {
-      //   sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
-      //     chat_session_id: userUUID,
-      //     chat_agent_id: idAgent,
-      //     chat_connection_status: "connected"
-      //   });
-      // }
     });
 
-    socket.value.on("disconnect", () => {
-      // Track disconnection event
-      // if (gaTrackingId) {
-      //   sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
-      //     chat_session_id: userUUID,
-      //     chat_agent_id: idAgent,
-      //     chat_connection_status: "disconnected"
-      //   });
-      // }
-    });
+    socket.value.on("disconnect", () => {});
 
     socket.value.on("response", async (val) => {
       addMessage(val);
@@ -109,52 +95,42 @@ export const useSocketConnection = (
           ? custom_style.value.soundName
           : soundName ?? "sound1"
       );
-
-      // Track bot response event
-      // if (gaTrackingId) {
-      //   sendFlexibleEvent(CHAT_EVENTS.MESSAGE_SENT, {
-      //     chat_session_id: userUUID,
-      //     chat_agent_id: idAgent,
-      //     chat_message_type: "bot_response",
-      //     chat_message_length: val.content?.length || 0
-      //   });
-      // }
     });
   };
 
   const setupNavigationTracking = () => {
     navigationInterval.value = setInterval(() => {
-    const currentPath = window.location.href;
+      const currentPath = window.location.href;
 
       if (currentPath !== lastPath.value) {
-      const now = new Date();
-      const userNavigation = {
-        urlPath: currentPath,
-        time: now.toISOString(),
+        const now = new Date();
+        const userNavigation = {
+          urlPath: currentPath,
+          time: now.toISOString(),
           clientId: getUserUUID(),
-        instance: idAgent,
-        utms: {
-          utm_source: localStorage.getItem("utm_source"),
-          utm_medium: localStorage.getItem("utm_medium"),
-          campaign: localStorage.getItem("campaign"),
-          utm_term: localStorage.getItem("utm_term"),
-          utm_content: localStorage.getItem("utm_content"),
-          gclid: localStorage.getItem("gclid"),
-          wbraid: localStorage.getItem("wbraid"),
-          gbraid: localStorage.getItem("gbraid"),
-          crm_link: localStorage.getItem("crm_link"),
-          adSet: localStorage.getItem("adSet"),
-          ad: localStorage.getItem("ad"),
-          form: localStorage.getItem("form"),
-          gad_campaignid: localStorage.getItem("gad_campaignid"),
-          gad_source: localStorage.getItem("gad_source"),
-        },
-      };
+          instance: idAgent,
+          utms: {
+            utm_source: localStorage.getItem("utm_source"),
+            utm_medium: localStorage.getItem("utm_medium"),
+            campaign: localStorage.getItem("campaign"),
+            utm_term: localStorage.getItem("utm_term"),
+            utm_content: localStorage.getItem("utm_content"),
+            gclid: localStorage.getItem("gclid"),
+            wbraid: localStorage.getItem("wbraid"),
+            gbraid: localStorage.getItem("gbraid"),
+            crm_link: localStorage.getItem("crm_link"),
+            adSet: localStorage.getItem("adSet"),
+            ad: localStorage.getItem("ad"),
+            form: localStorage.getItem("form"),
+            gad_campaignid: localStorage.getItem("gad_campaignid"),
+            gad_source: localStorage.getItem("gad_source"),
+          },
+        };
 
         socket.value?.emit("navigation-path-chat", userNavigation);
         lastPath.value = currentPath;
-    }
-  }, 2000);
+      }
+    }, 2000);
   };
 
   const setupWidgetConfig = () => {
@@ -162,9 +138,9 @@ export const useSocketConnection = (
       socket.value?.emit("get-custom-widget", idAgent, (val) => {
         if (!haveSameValues(val, custom_style.value)) {
           setCustomStyle({ ...val });
-      }
-    });
-  }, 1000);
+        }
+      });
+    }, 1000);
   };
 
   const setupMetricsTracking = () => {
@@ -174,8 +150,8 @@ export const useSocketConnection = (
       if (!areObjectsDeepEqual(lastMetrics, currentMetrics)) {
         socket.value?.emit("metrics-chat", currentMetrics);
         lastMetrics = currentMetrics;
-    }
-  }, 10000);
+      }
+    }, 10000);
   };
 
   onMounted(() => {
@@ -207,7 +183,7 @@ export const useSocketConnection = (
 
   return {
     socket,
-    manager
+    manager,
   };
 };
 

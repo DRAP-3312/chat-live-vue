@@ -29,7 +29,6 @@ const props = defineProps({
   },
   gaTrackingId: {
     type: String,
-    default: "",
   },
   welcomeMessage: {
     type: String,
@@ -145,22 +144,22 @@ const toggleChat = () => {
   }
   setValueOpenChat(!openChat.value);
   chatButtonRef.value?.classList.remove("chat-button-greet-animation");
-
-  // Track widget open/close event
-  if (!openChat.value) {
-    sendFlexibleEvent(CHAT_EVENTS.WIDGET_OPENED, {
-      chat_is_expanded: true,
-    });
-  } else {
-    sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
-      chat_is_expanded: false,
-    });
-  }
 };
 
 const dismissGreeting = () => {
   showGreetingModal.value = false;
   chatButtonRef.value?.classList.remove("chat-button-greet-animation");
+};
+
+const client_Clic_Start = () => {
+  openChat.value
+    ? sendFlexibleEvent(CHAT_EVENTS.WIDGET_OPENED, {
+        chat_form_open: true,
+      })
+    : sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
+        chat_form_open: false,
+      });
+  clicStartChat();
 };
 
 const clicStartChat = () => {
@@ -225,6 +224,12 @@ watch(
   },
   { deep: true }
 );
+
+watch(openChat, (newValue, oldValue) => {
+  if (newValue) {
+    clicStartChat();
+  }
+});
 
 // Watch para inicializar GA4 si el trackingId cambia y es válido
 watch(
@@ -316,7 +321,7 @@ onMounted(() => {
             ✕
           </button>
         </div>
-        <div @click="clicStartChat" style="cursor: pointer">
+        <div @click="client_Clic_Start" style="cursor: pointer">
           <SvgComponent
             :type="
               custom_style.svgName ? custom_style.svgName : props.svgName ?? ''
@@ -331,7 +336,7 @@ onMounted(() => {
             }}
           </p>
           <button
-            @click="clicStartChat"
+            @click="client_Clic_Start"
             class="greeting-ok-button"
             :style="{
               backgroundColor: custom_style.welcomeButtonColor

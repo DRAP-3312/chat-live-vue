@@ -56,5 +56,7 @@ export const CHAT_EVENTS = {
   SESSION_STARTED: "chat_session_started",
   WIDGET_OPENED: "chat_widget_opened",
   WIDGET_CLOSED: "chat_widget_closed",
-  MESSAGE_SENT: "chat_message_sent",
+  MESSAGE_SENT_CLIENT: "chat_message_sent_client",
+  LEAD_REGISTERED: 'lead_registered',
+  SCHEDULED_APPOINTMENT: 'scheduled_appointment'
 };

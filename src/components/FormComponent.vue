@@ -65,7 +65,11 @@ import SvgComponent from "./SvgComponent.vue";
 import ChatBubbleComponent from "./ChatBubbleComponent.vue";
 import { useChatMessages } from "../composable/useMessages";
 import { useSocketConnection } from "../composable/socket-connection";
-import {  sendFlexibleEvent,CHAT_EVENTS, initializeGoogleAnalytics } from "../utils/dataLayer";
+import {
+  sendFlexibleEvent,
+  CHAT_EVENTS,
+  initializeGoogleAnalytics,
+} from "../utils/dataLayer";
 
 const props = defineProps({
   idAgent: {
@@ -78,7 +82,7 @@ const props = defineProps({
   },
   gaTrackingId: {
     type: String,
-    default: '',
+    default: "",
   },
   socket: {
     type: Object,
@@ -188,12 +192,11 @@ const sendMessage = () => {
       (val) => {}
     );
 
-    // // Track message sent event
-    // sendFlexibleEvent(CHAT_EVENTS.MESSAGE_SENT, {
-    //   chat_session_id: id,
-    //   chat_message_length: message.value.trim().length,
-    //   chat_message_type: "text",
-    // });
+    sendFlexibleEvent(CHAT_EVENTS.MESSAGE_SENT, {
+      chat_session_id: id,
+      chat_message_length: message.value.trim().length,
+      chat_message_type: "text",
+    });
 
     message.value = "";
   }
@@ -204,33 +207,14 @@ onMounted(() => {
     textareaRef.value.focus();
   }
 
-  // Initialize Google Analytics if tracking ID is provided
-  // if (props.gaTrackingId) {
-  //   // initializeGoogleAnalytics(props.gaTrackingId);
-    
-  //   // // Track session started event
-  //   // sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
-  //   //   chat_session_id: id,
-  //   //   chat_agent_id: props.idAgent
-  //   // });
-  // }
-
   setTimeout(() => {
     isVisible.value = true;
-    
-    // Track widget opened event
-    // if (props.gaTrackingId) {
-    //   sendFlexibleEvent(CHAT_EVENTS.WIDGET_OPENED, {
-    //     chat_session_id: id,
-    //     chat_agent_id: props.idAgent
-    //   });
-    // }
   }, 100);
 });
 
 const closePanel = () => {
   isVisible.value = false;
-  
+
   // Track widget closed event
   // if (props.gaTrackingId) {
   //   sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
