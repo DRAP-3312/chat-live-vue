@@ -3,11 +3,7 @@ import { Manager } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import { useChatMessages } from "./useMessages";
 import { get_utm } from "./get_utm";
-import {
-  initializeGoogleAnalytics,
-  sendFlexibleEvent,
-  CHAT_EVENTS,
-} from "../utils/dataLayer";
+import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { useSessionMetrics } from "./useSessionMetrics";
 import { areObjectsDeepEqual } from "./compare-objects";
 import { useSound } from "./useSound";
@@ -53,9 +49,9 @@ export const useSocketConnection = (
     const idThread = userUUID;
 
     // Initialize Google Analytics if tracking ID is provided
-    if (gaTrackingId) {
-      initializeGoogleAnalytics(gaTrackingId);
-    }
+    // if (gaTrackingId) {
+    //   initializeGoogleAnalytics(gaTrackingId);
+    // }
 
     manager.value = new Manager(socketUrl, {
       transports: ["websocket", "polling"],
@@ -93,6 +89,22 @@ export const useSocketConnection = (
           ? custom_style.value.soundName
           : soundName ?? "sound1"
       );
+    });
+
+    socket.value.on("lead-registered", () => {
+      if (gaTrackingId) {
+        sendFlexibleEvent(CHAT_EVENTS.LEAD_REGISTERED, {
+          chat_session_id: userUUID,
+        });
+      }
+    });
+
+    socket.value.on("scheduled_appointment", () => {
+      if (gaTrackingId) {
+        sendFlexibleEvent(CHAT_EVENTS.SCHEDULED_APPOINTMENT, {
+          chat_session_id: userUUID,
+        });
+      }
     });
   };
 
