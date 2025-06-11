@@ -152,6 +152,7 @@ const dismissGreeting = () => {
 };
 
 const client_Clic_Start = () => {
+  console.log("client_Clic_Start", openChat.value);
   openChat.value
     ? sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
         chat_form_open: true,
