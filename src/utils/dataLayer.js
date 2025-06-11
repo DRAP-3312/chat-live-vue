@@ -44,7 +44,8 @@ export function initializeGoogleAnalytics(trackingId) {
 }
 
 // Envía evento a GA4 si no hay GTM, si hay GTM solo pushToDataLayer
-export function sendFlexibleEvent(eventName, params = {}) {
+export function sendFlexibleEvent(eventName, params) {
+  console.log("sendFlexibleEvent", eventName, params);
   pushToDataLayer({ event: eventName, ...params });
   if (window.gtag && !isGTMActive()) {
     window.gtag("event", eventName, params);
