@@ -157,7 +157,7 @@ const client_Clic_Start = () => {
         chat_form_open: true,
       })
     : sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
-        chat_form_open: false,
+        chat_form_close: true,
       });
   clicStartChat();
 };

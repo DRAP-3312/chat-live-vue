@@ -42,8 +42,6 @@ export const useSocketConnection = (
       if (gaTrackingId) {
         sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
           chat_session_id: userUUID,
-          chat_source: "user_initiated",
-          chat_agent_id: idAgent,
         });
       }
     }
