@@ -152,14 +152,6 @@ const dismissGreeting = () => {
 };
 
 const client_Clic_Start = () => {
-  console.log("client_Clic_Start", openChat.value);
-  openChat.value
-    ? sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
-        chat_form_open: true,
-      })
-    : sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
-        chat_form_close: true,
-      });
   clicStartChat();
 };
 
@@ -230,6 +222,14 @@ watch(openChat, (newValue, oldValue) => {
   if (newValue) {
     clicStartChat();
   }
+
+  newValue
+    ? sendFlexibleEvent(CHAT_EVENTS.WIDGET_OPENED, {
+        chat_form_open: true,
+      })
+    : sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
+        chat_form_close: true,
+      });
 });
 
 // Watch para inicializar GA4 si el trackingId cambia y es válido

@@ -34,12 +34,6 @@ export const useSocketConnection = (
     if (!userUUID) {
       userUUID = uuidv4();
       localStorage.setItem("userUUID", userUUID);
-
-      if (gaTrackingId) {
-        sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
-          chat_session_id: userUUID,
-        });
-      }
     }
     return userUUID;
   };
@@ -73,6 +67,10 @@ export const useSocketConnection = (
           }
         }
       );
+
+      sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
+        chat_session_id: userUUID,
+      });
     });
 
     socket.value.on("disconnect", () => {});
@@ -87,19 +85,15 @@ export const useSocketConnection = (
     });
 
     socket.value.on("lead-registered", () => {
-      if (gaTrackingId) {
-        sendFlexibleEvent(CHAT_EVENTS.LEAD_REGISTERED, {
-          chat_session_id: userUUID,
-        });
-      }
+      sendFlexibleEvent(CHAT_EVENTS.LEAD_REGISTERED, {
+        chat_session_id: userUUID,
+      });
     });
 
     socket.value.on("scheduled_appointment", () => {
-      if (gaTrackingId) {
-        sendFlexibleEvent(CHAT_EVENTS.SCHEDULED_APPOINTMENT, {
-          chat_session_id: userUUID,
-        });
-      }
+      sendFlexibleEvent(CHAT_EVENTS.SCHEDULED_APPOINTMENT, {
+        chat_session_id: userUUID,
+      });
     });
   };
 
