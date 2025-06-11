@@ -48,11 +48,6 @@ export const useSocketConnection = (
     const userUUID = getUserUUID();
     const idThread = userUUID;
 
-    // Initialize Google Analytics if tracking ID is provided
-    // if (gaTrackingId) {
-    //   initializeGoogleAnalytics(gaTrackingId);
-    // }
-
     manager.value = new Manager(socketUrl, {
       transports: ["websocket", "polling"],
       reconnection: true,

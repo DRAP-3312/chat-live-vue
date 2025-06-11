@@ -235,7 +235,7 @@ watch(openChat, (newValue, oldValue) => {
 watch(
   () => props.gaTrackingId,
   (newVal, oldVal) => {
-    if (newVal) {
+    if (newVal && oldVal !== newVal) {
       initializeGoogleAnalytics(newVal);
     }
   }
@@ -244,7 +244,7 @@ watch(
 onMounted(() => {
   setupTimers();
 
-  // Initialize Google Analytics if tracking ID is provided
+  // Inicializar Google Analytics solo aquí
   if (props.gaTrackingId) {
     initializeGoogleAnalytics(props.gaTrackingId);
   }

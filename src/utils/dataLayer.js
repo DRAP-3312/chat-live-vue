@@ -46,7 +46,7 @@ export function initializeGoogleAnalytics(trackingId) {
 // Envía evento a GA4 si no hay GTM, si hay GTM solo pushToDataLayer
 export function sendFlexibleEvent(eventName, params = {}) {
   pushToDataLayer({ event: eventName, ...params });
-  if (window.gtag) {
+  if (window.gtag && !isGTMActive()) {
     window.gtag("event", eventName, params);
   }
 }
@@ -57,6 +57,6 @@ export const CHAT_EVENTS = {
   WIDGET_OPENED: "chat_widget_opened",
   WIDGET_CLOSED: "chat_widget_closed",
   MESSAGE_SENT_CLIENT: "chat_message_sent_client",
-  LEAD_REGISTERED: 'chat_lead_registered',
-  SCHEDULED_APPOINTMENT: 'chat_scheduled_appointment'
+  LEAD_REGISTERED: "chat_lead_registered",
+  SCHEDULED_APPOINTMENT: "chat_scheduled_appointment",
 };
