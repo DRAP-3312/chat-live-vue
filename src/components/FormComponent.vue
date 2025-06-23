@@ -173,6 +173,7 @@ const filter = new Filter();
 
 const sendMessage = () => {
   const valueToSend = filter.clean(message.value.trim());
+  const utms = JSON.parse(localStorage.getItem("utm_obj"));
   if (valueToSend && props.socket) {
     const form = {
       content: valueToSend,
@@ -187,22 +188,7 @@ const sendMessage = () => {
         message: valueToSend,
         agentId: props.idAgent,
         api_key: props.api_key,
-        utms: {
-          utm_source: localStorage.getItem("utm_source"),
-          utm_medium: localStorage.getItem("utm_medium"),
-          campaign: localStorage.getItem("campaign"),
-          utm_term: localStorage.getItem("utm_term"),
-          utm_content: localStorage.getItem("utm_content"),
-          gclid: localStorage.getItem("gclid"),
-          wbraid: localStorage.getItem("wbraid"),
-          gbraid: localStorage.getItem("gbraid"),
-          crm_link: localStorage.getItem("crm_link"),
-          adSet: localStorage.getItem("adSet"),
-          ad: localStorage.getItem("ad"),
-          form: localStorage.getItem("form"),
-          gad_campaignid: localStorage.getItem("gad_campaignid"),
-          gad_source: localStorage.getItem("gad_source"),
-        },
+        utms,
       },
       (val) => {}
     );
@@ -248,9 +234,9 @@ const handleClose = () => {
   position: absolute;
   bottom: 80px;
   left: 0;
-  height: 100vh;   /* Esto se aplica primero */
+  height: 100vh; /* Esto se aplica primero */
   height: 100dvh;
-  width: 100vw;   /* Fallback para navegadores que no entienden dvw */
+  width: 100vw; /* Fallback para navegadores que no entienden dvw */
   width: 100dvw;
   border-radius: 6px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
