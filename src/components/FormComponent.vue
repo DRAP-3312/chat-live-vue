@@ -64,8 +64,9 @@ import { ref, onMounted } from "vue";
 import SvgComponent from "./SvgComponent.vue";
 import ChatBubbleComponent from "./ChatBubbleComponent.vue";
 import { useChatMessages } from "../composable/useMessages";
-import { useSocketConnection } from "../composable/socket-connection";
 import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
+import { Filter } from "bad-words";
+import { bad_words_spanish_list } from "../utils/bad-words-spanish";
 
 const props = defineProps({
   idAgent: {
@@ -153,19 +154,24 @@ const isVisible = ref(false);
 const { addMessage } = useChatMessages();
 const message = ref("");
 const id = localStorage.getItem("userUUID");
+const filter = new Filter();
 
 const sendMessage = () => {
-  if (message.value.trim() && props.socket) {
+  const valueToSend = filter.clean(message.value.trim());
+
+  //const isCencured = valueToSend === message.value.trim() ? true : false;
+  if (valueToSend && props.socket) {
     const form = {
-      content: message.value.trim(),
+      content: valueToSend,
       role: "user",
     };
     addMessage(form);
+
     props.socket.emit(
       "send-chat-message",
       {
         userUUID: id ?? "",
-        message: message.value.trim(),
+        message: valueToSend,
         agentId: props.idAgent,
         api_key: props.api_key,
         utms: {
@@ -190,7 +196,7 @@ const sendMessage = () => {
 
     const data = {
       chat_session_id: id,
-      chat_message_length: message.value.trim().length,
+      chat_message_length: valueToSend.length,
       chat_message_type: "text",
     };
     sendFlexibleEvent(CHAT_EVENTS.MESSAGE_SENT_CLIENT, data);
@@ -200,6 +206,7 @@ const sendMessage = () => {
 };
 
 onMounted(() => {
+  filter.addWords(...bad_words_spanish_list);
   if (textareaRef.value) {
     textareaRef.value.focus();
   }
@@ -211,14 +218,6 @@ onMounted(() => {
 
 const closePanel = () => {
   isVisible.value = false;
-
-  // Track widget closed event
-  // if (props.gaTrackingId) {
-  //   sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
-  //     chat_session_id: id,
-  //     chat_agent_id: props.idAgent
-  //   });
-  // }
 };
 </script>
 
