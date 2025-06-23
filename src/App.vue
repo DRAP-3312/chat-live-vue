@@ -699,8 +699,10 @@ onMounted(() => {
     left: 0;
     right: 0;
     top: 0;
-    width: 100vw;
-    height: 100vh;
+    height: 100vh; /* Esto se aplica primero */
+    height: 100dvh;
+    width: 100vw; /* Fallback para navegadores que no entienden dvw */
+    width: 100dvw;
   }
 
   .chat-container.chat-open .form-container .chat-panel {
@@ -709,8 +711,10 @@ onMounted(() => {
     left: 0;
     right: 0;
     top: 0;
-    width: 100vw;
-    height: 100vh;
+    height: 100vh; /* Esto se aplica primero */
+    height: 100dvh;
+    width: 100vw; /* Fallback para navegadores que no entienden dvw */
+    width: 100dvw;
     border-radius: 0;
     margin: 0;
   }

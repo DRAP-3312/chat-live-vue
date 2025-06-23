@@ -248,8 +248,10 @@ const handleClose = () => {
   position: absolute;
   bottom: 80px;
   left: 0;
-  width: 80vw;
-  height: 80vh;
+  height: 100vh;   /* Esto se aplica primero */
+  height: 100dvh;
+  width: 100vw;   /* Fallback para navegadores que no entienden dvw */
+  width: 100dvw;
   border-radius: 6px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   display: flex;
