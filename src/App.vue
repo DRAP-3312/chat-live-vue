@@ -259,7 +259,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="chat-container">
+  <div class="chat-container" :class="{ 'chat-open': openChat }">
     <transition name="typing-fade">
       <div
         v-if="showTypingIndicator"
@@ -456,6 +456,7 @@ onMounted(() => {
         :botMessageTextColor="
           custom_style.botMessageTextColor || botMessageTextColor
         "
+        @close="toggleChat"
       />
     </div>
   </div>
@@ -665,5 +666,53 @@ onMounted(() => {
   line-height: 1;
   position: relative;
   z-index: 1;
+}
+
+/* --- Estilos para dispositivos móviles --- */
+@media (max-width: 768px) {
+  .chat-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .chat-container:not(.chat-open) {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: auto;
+    top: auto;
+  }
+
+  .chat-container.chat-open .chat-button,
+  .chat-container.chat-open .typing-indicator,
+  .chat-container.chat-open .greeting-modal {
+    display: none;
+  }
+
+  .chat-container.chat-open .form-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .chat-container.chat-open .form-container .chat-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    margin: 0;
+  }
 }
 </style>

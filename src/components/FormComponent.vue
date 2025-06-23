@@ -12,11 +12,24 @@
           color: chatHeaderTextColor,
         }"
       >
-        <div class="sub-head">
-          <span>Hola!</span>
-          <SvgComponent :type="'hello'" />
+        <div class="header-content">
+          <div class="sub-head">
+            <span>Hola!</span>
+            <SvgComponent :type="'hello'" />
+          </div>
+          <span class="header-subtitle"
+            >Inicia un chat, estamos aquí para ayudarte.</span
+          >
         </div>
-        <span>Inicia un chat, estamos aquí para ayudarte.</span>
+        <button
+          class="close-button"
+          @click="handleClose"
+          :style="{
+            color: chatHeaderTextColor,
+          }"
+        >
+          ✕
+        </button>
       </div>
       <div
         class="chat-messages"
@@ -149,6 +162,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["close"]);
+
 const textareaRef = ref(null);
 const isVisible = ref(false);
 const { addMessage } = useChatMessages();
@@ -158,8 +173,6 @@ const filter = new Filter();
 
 const sendMessage = () => {
   const valueToSend = filter.clean(message.value.trim());
-
-  //const isCencured = valueToSend === message.value.trim() ? true : false;
   if (valueToSend && props.socket) {
     const form = {
       content: valueToSend,
@@ -219,6 +232,14 @@ onMounted(() => {
 const closePanel = () => {
   isVisible.value = false;
 };
+
+const handleClose = () => {
+  sendFlexibleEvent(CHAT_EVENTS.WIDGET_CLOSED, {
+    chat_form_close: true,
+  });
+  closePanel();
+  emit("close");
+};
 </script>
 
 <style scoped>
@@ -260,6 +281,76 @@ const closePanel = () => {
   }
 }
 
+/* --- Estilos para dispositivos móviles --- */
+@media (max-width: 768px) {
+  .chat-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .chat-header {
+    padding: 15px 20px;
+    position: relative;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .header-content {
+    flex-grow: 1;
+    margin-right: 40px;
+  }
+
+  .chat-header .sub-head {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+  }
+
+  .header-subtitle {
+    font-size: 1rem;
+  }
+
+  .close-button {
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    font-size: 22px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .close-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .chat-messages {
+    padding: 15px;
+  }
+
+  .chat-input {
+    padding: 15px 20px;
+    min-height: 60px;
+  }
+
+  textarea {
+    min-height: 50px;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+
+  .send-button {
+    width: 50px;
+    height: 50px;
+  }
+}
+
 /* encabezado saludo */
 
 .chat-header {
@@ -274,6 +365,36 @@ const closePanel = () => {
   flex-direction: column;
   justify-content: center;
   margin: 0px;
+  position: relative;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .sub-head {
@@ -283,6 +404,12 @@ const closePanel = () => {
   font-weight: 600;
   font-family: "Inter", "Segoe UI", "Open Sans", -apple-system,
     BlinkMacSystemFont, sans-serif;
+}
+
+.header-subtitle {
+  padding: 3px;
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
 /* Panel mensajes */
