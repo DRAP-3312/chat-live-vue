@@ -8,18 +8,12 @@
       <div
         class="chat-header"
         :style="{
-          backgroundColor: chatHeaderBackground,
           color: chatHeaderTextColor,
         }"
       >
-        <div class="header-content">
-          <div class="sub-head">
-            <span>Hola!</span>
-            <SvgComponent :type="'hello'" />
-          </div>
-          <span class="header-subtitle"
-            >Inicia un chat, estamos aquí para ayudarte.</span
-          >
+        <div>
+          <strong v-if="instanceName">{{ instanceName }}</strong>
+          <span>Inicia un chat, estamos aquí para ayudarte.</span>
         </div>
         <button
           class="close-button"
@@ -31,10 +25,8 @@
           ✕
         </button>
       </div>
-      <div
-        class="chat-messages"
-        :style="{ backgroundColor: chatMessagesBackground }"
-      >
+      <div class="line-separate"></div>
+      <div class="chat-messages">
         <ChatBubbleComponent
           :userMessageBackground="userMessageBackground"
           :userMessageTextColor="userMessageTextColor"
@@ -102,18 +94,18 @@ const props = defineProps({
     type: String,
     default: "#ffffff",
   },
-  chatHeaderBackground: {
-    type: String,
-    default: "#131844",
-  },
+  // chatHeaderBackground: {
+  //   type: String,
+  //   default: "#131844",
+  // },
   chatHeaderTextColor: {
     type: String,
     default: "#ffffff",
   },
-  chatMessagesBackground: {
-    type: String,
-    default: "#f8f9fc",
-  },
+  // chatMessagesBackground: {
+  //   type: String,
+  //   default: "#f8f9fc",
+  // },
   chatInputBackground: {
     type: String,
     default: "#ffffff",
@@ -157,6 +149,10 @@ const props = defineProps({
   },
 
   nameSpace: {
+    type: String,
+    default: "",
+  },
+  instanceName: {
     type: String,
     default: "",
   },
@@ -238,7 +234,7 @@ const handleClose = () => {
   height: 100dvh;
   width: 100vw; /* Fallback para navegadores que no entienden dvw */
   width: 100dvw;
-  border-radius: 6px;
+  border-radius: 15px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
@@ -284,33 +280,15 @@ const handleClose = () => {
     box-shadow: none;
   }
 
-  .chat-header {
-    padding: 15px 20px;
+  /* .chat-header {
+    height: 20%;
     position: relative;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-  }
-
-  .header-content {
-    flex-grow: 1;
-    margin-right: 40px;
-  }
-
-  .chat-header .sub-head {
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-  }
-
-  .header-subtitle {
-    font-size: 1rem;
-  }
+  } */
 
   .close-button {
-    top: 15px;
-    right: 15px;
-    width: 35px;
-    height: 35px;
     font-size: 22px;
     background-color: rgba(255, 255, 255, 0.1);
   }
@@ -343,15 +321,15 @@ const handleClose = () => {
 
 .chat-header {
   width: 100%;
-  height: auto;
-  padding: 1px 4px 1px 4px;
-  background-color: #131844;
-  color: white;
+  height: 8%;
+  padding: 1px;
+  background-color: transparent;
   font-family: "Inter", "Segoe UI", "Open Sans", -apple-system,
     BlinkMacSystemFont, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin: 0px;
   position: relative;
 }
@@ -405,7 +383,7 @@ const handleClose = () => {
 .chat-messages {
   flex-grow: 1;
   overflow-y: auto;
-  background-color: #f8f9fc;
+  background-color: transparent;
   padding: 10px;
 }
 
@@ -458,9 +436,9 @@ const handleClose = () => {
 }
 
 .send-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
   background-color: #131844;
   color: white;
   padding: 5px;
@@ -485,10 +463,10 @@ textarea {
   max-height: 100px;
   padding: 8px 10px;
   outline: none;
-  background-color: #fff;
+  background-color: transparent;
   resize: none;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 12px;
   line-height: 1.4;
   font-family: "Inter", "Segoe UI", "Open Sans", -apple-system,
     BlinkMacSystemFont, sans-serif;
@@ -527,5 +505,10 @@ textarea {
 .slide-fade-leave-to {
   transform: scale(0.8);
   opacity: 0;
+}
+.line-separate {
+  width: 100%;
+  height: 2px;
+  background-color: rgb(228, 229, 231);
 }
 </style>

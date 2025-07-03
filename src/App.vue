@@ -14,18 +14,22 @@ const props = defineProps({
   socketUrl: {
     type: String,
     required: true,
+    default: "https://dev.milkyway.virture.io",
   },
   idAgent: {
     type: String,
     required: true,
+    default: "65d7a475abc4c71e14dee693",
   },
   api_key: {
     type: String,
     required: true,
+    default: "api",
   },
   nameSpace: {
     type: String,
     required: true,
+    default: "/chat",
   },
   gaTrackingId: {
     type: String,
@@ -117,6 +121,10 @@ const props = defineProps({
   soundName: {
     type: String,
     default: "sound1",
+  },
+  instanceName: {
+    type: String,
+    default: "Saguaro Drap",
   },
 });
 
@@ -371,9 +379,7 @@ onMounted(() => {
               backgroundColor: custom_style.chatHeaderBackground
                 ? custom_style.chatHeaderBackground
                 : chatHeaderBackground,
-              color: custom_style.chatHeaderTextColor
-                ? custom_style.chatHeaderTextColor
-                : chatHeaderTextColor,
+              color: '#fff',
             }
           : {}
       "
@@ -456,6 +462,7 @@ onMounted(() => {
         :botMessageTextColor="
           custom_style.botMessageTextColor || botMessageTextColor
         "
+        :instanceName="custom_style.instanceName"
         @close="toggleChat"
       />
     </div>

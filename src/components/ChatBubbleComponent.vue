@@ -65,7 +65,7 @@ watch(messages, scrollToBottom, { deep: true });
 .message {
   margin: 2px 0;
   padding: 5px 10px;
-  border-radius: 3px;
+  border-radius: 12px;
   max-width: 70%;
   min-width: 40px;
   overflow-wrap: break-word;
