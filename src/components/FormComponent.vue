@@ -25,6 +25,7 @@
           ✕
         </button>
       </div>
+      <span class="font-extrabold bg-green-600">Prueba tailwind</span>
       <div class="line-separate"></div>
       <div class="chat-messages">
         <ChatBubbleComponent
