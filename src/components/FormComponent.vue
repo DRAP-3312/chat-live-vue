@@ -15,11 +15,11 @@
           <div class="w-12 h-12 bg-green-50 p-1 rounded-md">
             <SvgComponent type="hi" :color="sendButtonBackground" />
           </div>
-          <div class="flex flex-col justify-center items-start gap-1">
-            <span v-if="instanceName" class="font-bold text-lg"
-              >Bienvenido a {{ instanceName }}</span
+          <div class="flex flex-col justify-center items-start gap-1 font-sans">
+            <strong v-if="instanceName" class="text-md md:text-lg text-gray-700"
+              >Bienvenido a {{ instanceName }}</strong
             >
-            <span class="text-sm text-gray-500"
+            <span class="text-gray-400 text-sm md:text-base"
               >Inicia un chat, estamos aquí para ayudarte.</span
             >
           </div>
@@ -47,7 +47,7 @@
         />
       </div>
       <div
-        class="flex gap-2 items-center p-2 min-h-[50px] bg-white"
+        class="flex gap-2 items-center p-2 h-[10%] bg-white"
         :style="{ backgroundColor: chatInputBackground }"
       >
         <textarea
