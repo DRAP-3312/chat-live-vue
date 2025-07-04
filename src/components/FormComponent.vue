@@ -6,20 +6,24 @@
       :style="{ backgroundColor: chatPanelBackground }"
     >
       <div
-        class="flex p-2 w-full h-[10%] justify-center items-center relative bg-transparent font-sans"
+        class="flex p-2 w-full h-[10%] justify-center items-center relative font-sans"
         :style="{
           color: chatHeaderTextColor,
+          backgroundColor: chatHeaderBackground,
         }"
       >
         <div class="flex p-2 flex-grow gap-1 justify-around items-center">
           <div class="w-12 h-12 bg-green-50 p-1 rounded-md">
             <SvgComponent type="hi" :color="sendButtonBackground" />
           </div>
-          <div class="flex flex-col justify-center items-start gap-1 font-sans">
-            <strong v-if="instanceName" class="text-md md:text-lg text-gray-700"
+          <div
+            class="flex flex-col justify-center items-start gap-1 font-sans"
+            :style="{ color: chatHeaderTextColor }"
+          >
+            <strong v-if="instanceName" class="text-md md:text-lg"
               >Bienvenido a {{ instanceName }}</strong
             >
-            <span class="text-gray-400 text-sm md:text-base"
+            <span class="text-sm md:text-base"
               >Inicia un chat, estamos aquí para ayudarte.</span
             >
           </div>
@@ -38,6 +42,34 @@
         </button>
       </div>
       <div class="w-full h-[2px] bg-gray-200"></div>
+      <div class="w-full flex flex-col p-2" v-if="!closeModalOption">
+        <div class="border border-gray-200 rounded-md hover:bg-gray-50">
+          <div class="flex w-full justify-end items-center">
+            <button
+              @click="onCloseModalOption"
+              class="hover:bg-gray-200 text-lg rounded-full w-8 h-8 justify-center items-center"
+            >
+              x
+            </button>
+          </div>
+          <div class="flex gap-1 p-2">
+            <button
+              v-if="!stateBtnUbication"
+              @click="setStateBtnUbication(true)"
+              class="flex justify-center items-center border border-blue-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-blue-600 flex-grow"
+            >
+              Compartir ubicación
+            </button>
+            <button
+              v-if="!stateBtnAlerts"
+              @click="setStateBtnAlert(true)"
+              class="flex justify-center items-center border border-purple-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-purple-600 flex-grow"
+            >
+              Recibir alertas
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="flex flex-col flex-grow overflow-y-auto bg-transparent p-2">
         <ChatBubbleComponent
           :userMessageBackground="userMessageBackground"
@@ -110,10 +142,10 @@ const props = defineProps({
     type: String,
     default: "#ffffff",
   },
-  // chatHeaderBackground: {
-  //   type: String,
-  //   default: "#131844",
-  // },
+  chatHeaderBackground: {
+    type: String,
+    default: "#131844",
+  },
   chatHeaderTextColor: {
     type: String,
     default: "#ffffff",
@@ -174,10 +206,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
-
 const textareaRef = ref(null);
 const isVisible = ref(false);
-const { addMessage } = useChatMessages();
+const {
+  addMessage,
+  closeModalOption,
+  onCloseModalOption,
+  stateBtnAlerts,
+  stateBtnUbication,
+  setStateBtnAlert,
+  setStateBtnUbication,
+} = useChatMessages();
 const message = ref("");
 const id = localStorage.getItem("userUUID");
 const filter = new Filter();
