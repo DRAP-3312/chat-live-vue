@@ -55,7 +55,7 @@
           type="text"
           v-model="message"
           placeholder="Empieza a preguntar..."
-          @keyup.enter="sendMessage"
+          @keyup.enter="handleEnterKey"
           class="flex-grow min-h-[40px] max-h-[100px] p-2 outline-none bg-transparent resize-none border border-gray-300 rounded-lg text-[16px] text-gray-700"
           :style="{
             backgroundColor: chatInputBackground,
@@ -222,6 +222,13 @@ const sendMessage = () => {
     sendFlexibleEvent(CHAT_EVENTS.MESSAGE_SENT_CLIENT, data);
 
     message.value = "";
+  }
+};
+
+const handleEnterKey = () => {
+  // Solo enviar mensaje en pantallas lg o mayores
+  if (window.innerWidth >= 1024) {
+    sendMessage();
   }
 };
 
