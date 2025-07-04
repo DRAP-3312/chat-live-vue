@@ -6,7 +6,7 @@ import { get_utm } from "./get_utm";
 import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { useSessionMetrics } from "./useSessionMetrics";
 import { areObjectsDeepEqual } from "./compare-objects";
-import { useSound } from "./useSound";
+import { soundInstance } from './soundInstance';
 
 export const useSocketConnection = (
   socketUrl,
@@ -25,7 +25,7 @@ export const useSocketConnection = (
 
   const { setValueMessages, addMessage, setCustomStyle, custom_style } =
     useChatMessages();
-  const { playSound } = useSound();
+  const { playSound } = soundInstance;
   const { sessionInfo } = useSessionMetrics();
 
   // Obtener o generar un UUID persistente para el usuario

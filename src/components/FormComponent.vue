@@ -122,6 +122,7 @@ import { useSound } from "../composable/useSound";
 import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { Filter } from "bad-words";
 import { bad_words_spanish_list } from "../utils/bad-words-spanish";
+import { soundInstance } from '../composable/soundInstance';
 
 const props = defineProps({
   idAgent: {
@@ -222,7 +223,7 @@ const {
 
 // Importar composables de permisos
 const { requestLocationPermission } = useSessionMetrics();
-const { requestAudioPermission } = useSound();
+const { enableSound } = soundInstance;
 
 const message = ref("");
 const id = localStorage.getItem("userUUID");
@@ -310,13 +311,9 @@ const handleLocationPermission = async () => {
   }
 };
 
-const handleAudioPermission = async () => {
-  try {
-    await requestAudioPermission();
-    setStateBtnAlert(true);
-  } catch (error) {
-    console.error("Error al solicitar permiso de audio:", error);
-  }
+const handleAudioPermission = () => {
+  enableSound();
+  setStateBtnAlert(true);
 };
 </script>
 
