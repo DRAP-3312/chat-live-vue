@@ -170,7 +170,6 @@ const props = defineProps({
   },
   instanceName: {
     type: String,
-    default: "Saguaro Drap",
   },
 });
 
