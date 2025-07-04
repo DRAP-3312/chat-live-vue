@@ -2,7 +2,7 @@
   <Transition name="slide-fade">
     <div
       v-if="isVisible"
-      class="fixed inset-0 w-screen h-screen rounded-none m-0 shadow-none flex flex-col overflow-hidden border border-gray-200 lg:relative lg:bottom-20 lg:left-0 lg:h-[80dvh] lg:w-[35vw] xl:w-[27vw] lg:rounded-[15px] lg:shadow-xl lg:m-0"
+      class="fixed inset-0 w-screen h-screen rounded-none m-0 shadow-none flex flex-col overflow-hidden border border-gray-200 lg:relative lg:bottom-20 lg:left-0 lg:h-[80dvh] lg:w-[35vw] xl:w-[25vw] lg:rounded-[15px] lg:shadow-xl lg:m-0"
       :style="{ backgroundColor: chatPanelBackground }"
     >
       <div
@@ -257,6 +257,9 @@ const handleClose = () => {
 </script>
 
 <style scoped>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 /* Animaciones */
 .slide-fade-enter-active {
   transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);

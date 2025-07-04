@@ -4,6 +4,7 @@ import FormComponent from "./components/FormComponent.vue";
 import SvgComponent from "./components/SvgComponent.vue";
 import { useSocketConnection } from "./composable/socket-connection";
 import { useChatMessages } from "./composable/useMessages";
+import './assets/style.css'
 import {
   initializeGoogleAnalytics,
   sendFlexibleEvent,
@@ -471,6 +472,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :host {
   display: block;
 }
