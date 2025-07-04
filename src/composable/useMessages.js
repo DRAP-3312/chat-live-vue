@@ -32,14 +32,14 @@ export const useChatMessages = () => {
   const setStateBtnAlert = (val) => {
     stateBtnAlerts.value = val;
 
-    if (stateBtnAlerts.value && stateBtnUbication) {
+    if (stateBtnAlerts.value && stateBtnUbication.value) {
       closeModalOption.value = true;
     }
   };
 
   const setStateBtnUbication = (val) => {
     stateBtnUbication.value = val;
-    if (stateBtnAlerts.value && stateBtnUbication) {
+    if (stateBtnAlerts.value && stateBtnUbication.value) {
       closeModalOption.value = true;
     }
   };

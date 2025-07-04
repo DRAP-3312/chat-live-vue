@@ -55,14 +55,14 @@
           <div class="flex gap-1 p-2">
             <button
               v-if="!stateBtnUbication"
-              @click="setStateBtnUbication(true)"
+              @click="handleLocationPermission"
               class="flex justify-center items-center border border-blue-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-blue-600 flex-grow"
             >
               Compartir ubicación
             </button>
             <button
               v-if="!stateBtnAlerts"
-              @click="setStateBtnAlert(true)"
+              @click="handleAudioPermission"
               class="flex justify-center items-center border border-purple-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-purple-600 flex-grow"
             >
               Recibir alertas
@@ -117,6 +117,8 @@ import { ref, onMounted, watch } from "vue";
 import SvgComponent from "./SvgComponent.vue";
 import ChatBubbleComponent from "./ChatBubbleComponent.vue";
 import { useChatMessages } from "../composable/useMessages";
+import { useSessionMetrics } from "../composable/useSessionMetrics";
+import { useSound } from "../composable/useSound";
 import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { Filter } from "bad-words";
 import { bad_words_spanish_list } from "../utils/bad-words-spanish";
@@ -217,6 +219,11 @@ const {
   setStateBtnAlert,
   setStateBtnUbication,
 } = useChatMessages();
+
+// Importar composables de permisos
+const { requestLocationPermission } = useSessionMetrics();
+const { requestAudioPermission } = useSound();
+
 const message = ref("");
 const id = localStorage.getItem("userUUID");
 const filter = new Filter();
@@ -291,6 +298,25 @@ const handleClose = () => {
   });
   closePanel();
   emit("close");
+};
+
+// Funciones para manejar los clics en los botones de permisos
+const handleLocationPermission = async () => {
+  try {
+    await requestLocationPermission();
+    setStateBtnUbication(true);
+  } catch (error) {
+    console.error("Error al solicitar permiso de ubicación:", error);
+  }
+};
+
+const handleAudioPermission = async () => {
+  try {
+    await requestAudioPermission();
+    setStateBtnAlert(true);
+  } catch (error) {
+    console.error("Error al solicitar permiso de audio:", error);
+  }
 };
 </script>
 

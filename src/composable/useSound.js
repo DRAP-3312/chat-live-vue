@@ -24,18 +24,19 @@ export const useSound = () => {
   }
 
   const playSound = async (soundName, volume = 1.0) => {
+    // Solo reproducir si ya tenemos permisos de audio
     if (!isSoundEnabled.value) {
-      const permissionGranted = await requestAudioPermission()
-      if (!permissionGranted) return
+      console.log('Permisos de audio no otorgados. El sonido no se reproducirá.')
+      return
     }
 
-      try {
+    try {
       // Crear una nueva instancia de Audio para cada reproducción
       const audio = new Audio()
       audio.volume = volume
 
       // Importar el archivo de sonido dinámicamente
-        const soundModule = await import(`../assets/sound/${soundName}.mp3`)
+      const soundModule = await import(`../assets/sound/${soundName}.mp3`)
       audio.src = soundModule.default
 
       // Limpiar recursos después de la reproducción
@@ -50,7 +51,7 @@ export const useSound = () => {
       }
 
       await audio.play()
-      } catch (error) {
+    } catch (error) {
       console.warn('Error al reproducir sonido:', error)
     }
   }
