@@ -366,7 +366,6 @@
         stroke-linejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
-        
         <g>
           <path
             class="st0"
@@ -394,9 +393,82 @@
   </div>
 
   <div v-else-if="type == 'personHiSpan'" class="personhicontainer">
-    <svg width="70" height="70" viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-bubble-message-hi personhisvg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>1036</title> <defs> </defs> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <path d="M8.979,0.021 C4.581,0.021 1.011,2.813 1.011,6.256 C1.011,9.399 3.987,11.99 7.852,12.42 L5.805,15.971 L11.924,12.045 C14.864,11.128 16.947,8.884 16.947,6.256 C16.947,2.812 13.379,0.021 8.979,0.021 L8.979,0.021 Z M9.04,9.018 L7.972,9.018 L7.972,7.075 L6.032,7.075 L6.032,9.018 L4.96,9.041 L4.96,3.992 L6.032,3.969 L6.032,5.987 L7.972,5.987 L7.972,3.969 L9.04,3.969 L9.04,9.018 L9.04,9.018 Z M11,9.018 L9.954,9.018 L9.954,5.938 L11,5.938 L11,9.018 L11,9.018 Z M11.031,5.041 L9.954,5.041 L9.954,3.937 L11.031,3.937 L11.031,5.041 L11.031,5.041 Z M14.031,9.016 L12.968,9.016 L12.968,7.963 L14.031,7.963 L14.031,9.016 L14.031,9.016 Z M14.016,7.016 L12.969,7.016 L12.969,3.954 L14.016,3.954 L14.016,7.016 L14.016,7.016 Z" fill="#ffdd67" class="si-glyph-fill"> </path> </g> </g></svg>
+    <svg
+      width="70"
+      height="70"
+      viewBox="0 -0.5 17 17"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      class="si-glyph si-glyph-bubble-message-hi personhisvg"
+      fill="#000000"
+    >
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        <title>1036</title>
+        <defs></defs>
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <path
+            d="M8.979,0.021 C4.581,0.021 1.011,2.813 1.011,6.256 C1.011,9.399 3.987,11.99 7.852,12.42 L5.805,15.971 L11.924,12.045 C14.864,11.128 16.947,8.884 16.947,6.256 C16.947,2.812 13.379,0.021 8.979,0.021 L8.979,0.021 Z M9.04,9.018 L7.972,9.018 L7.972,7.075 L6.032,7.075 L6.032,9.018 L4.96,9.041 L4.96,3.992 L6.032,3.969 L6.032,5.987 L7.972,5.987 L7.972,3.969 L9.04,3.969 L9.04,9.018 L9.04,9.018 Z M11,9.018 L9.954,9.018 L9.954,5.938 L11,5.938 L11,9.018 L11,9.018 Z M11.031,5.041 L9.954,5.041 L9.954,3.937 L11.031,3.937 L11.031,5.041 L11.031,5.041 Z M14.031,9.016 L12.968,9.016 L12.968,7.963 L14.031,7.963 L14.031,9.016 L14.031,9.016 Z M14.016,7.016 L12.969,7.016 L12.969,3.954 L14.016,3.954 L14.016,7.016 L14.016,7.016 Z"
+            fill="#ffdd67"
+            class="si-glyph-fill"
+          ></path>
+        </g>
+      </g>
+    </svg>
 
-    <svg width="70" height="70" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M4 21V18.5C4 15.4624 6.46243 13 9.5 13H12.8513C15.307 13 17.4651 11.3721 18.1397 9.01097L18.7454 6.89097C18.8961 6.3636 19.3781 6 19.9266 6C20.7258 6 21.3122 6.75106 21.1184 7.5264L19.3638 14.5448C19.15 15.4 18.3816 16 17.5 16M8 21V18M16 6.5C16 8.70914 14.2091 10.5 12 10.5C9.79086 10.5 8 8.70914 8 6.5C8 4.29086 9.79086 2.5 12 2.5C14.2091 2.5 16 4.29086 16 6.5Z" stroke="#42ade2" stroke-linecap="round" stroke-width="1.4"></path></g></svg>
+    <svg
+      width="70"
+      height="70"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M4 21V18.5C4 15.4624 6.46243 13 9.5 13H12.8513C15.307 13 17.4651 11.3721 18.1397 9.01097L18.7454 6.89097C18.8961 6.3636 19.3781 6 19.9266 6C20.7258 6 21.3122 6.75106 21.1184 7.5264L19.3638 14.5448C19.15 15.4 18.3816 16 17.5 16M8 21V18M16 6.5C16 8.70914 14.2091 10.5 12 10.5C9.79086 10.5 8 8.70914 8 6.5C8 4.29086 9.79086 2.5 12 2.5C14.2091 2.5 16 4.29086 16 6.5Z"
+          stroke="#42ade2"
+          stroke-linecap="round"
+          stroke-width="1.4"
+        ></path>
+      </g>
+    </svg>
+  </div>
+
+  <div v-else-if="type === 'hi'">
+    <svg
+      viewBox="0 0 24.00 24.00"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      :stroke="color ?? '#00d123'"
+      transform="matrix(1, 0, 0, 1, 0, 0)"
+    >
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M4 21V18.5C4 15.4624 6.46243 13 9.5 13H12.8513C15.307 13 17.4651 11.3721 18.1397 9.01097L18.7454 6.89097C18.8961 6.3636 19.3781 6 19.9266 6C20.7258 6 21.3122 6.75106 21.1184 7.5264L19.3638 14.5448C19.15 15.4 18.3816 16 17.5 16M8 21V18M16 6.5C16 8.70914 14.2091 10.5 12 10.5C9.79086 10.5 8 8.70914 8 6.5C8 4.29086 9.79086 2.5 12 2.5C14.2091 2.5 16 4.29086 16 6.5Z"
+          stroke="#00d123"
+          stroke-linecap="round"
+          stroke-width="1.608"
+        ></path>
+      </g>
+    </svg>
   </div>
   <div v-else></div>
 </template>
@@ -404,6 +476,7 @@
 <script setup>
 defineProps({
   type: String,
+  color:String
 });
 </script>
 
@@ -453,7 +526,6 @@ defineProps({
   }
 }
 
-
 /* handshake */
 .animated-hand-shake {
   animation: bounce-hand 1s ease-in-out infinite alternate;
@@ -468,18 +540,15 @@ defineProps({
   }
 }
 
-
 /* personHi */
 
-.personhicontainer{
+.personhicontainer {
   display: flex;
   flex-direction: column;
-  gap: 1;  
+  gap: 1;
 }
 
-
-
-.personhisvg{
+.personhisvg {
   width: 40%;
   justify-content: end;
   animation: hi-hi 1s ease-in-out infinite alternate;

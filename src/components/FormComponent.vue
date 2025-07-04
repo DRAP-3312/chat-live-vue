@@ -2,21 +2,33 @@
   <Transition name="slide-fade">
     <div
       v-if="isVisible"
-      class="chat-panel"
+      class="fixed inset-0 w-screen h-screen rounded-none m-0 shadow-none flex flex-col overflow-hidden border border-gray-200 lg:relative lg:bottom-20 lg:left-0 lg:h-[80dvh] lg:w-[35vw] xl:w-[27vw] lg:rounded-[15px] lg:shadow-xl lg:m-0"
       :style="{ backgroundColor: chatPanelBackground }"
     >
       <div
-        class="chat-header"
+        class="flex p-2 w-full h-[10%] justify-center items-center relative bg-transparent font-sans"
         :style="{
           color: chatHeaderTextColor,
         }"
       >
-        <div>
-          <strong v-if="instanceName">{{ instanceName }}</strong>
-          <span>Inicia un chat, estamos aquí para ayudarte.</span>
+        <div class="flex p-2 flex-grow gap-1 justify-around items-center">
+          <div class="w-12 h-12 bg-green-50 p-1 rounded-md">
+            <SvgComponent type="hi" :color="sendButtonBackground" />
+          </div>
+          <div class="flex flex-col justify-center items-start gap-1">
+            <span v-if="instanceName" class="font-bold text-lg"
+              >Bienvenido a {{ instanceName }}</span
+            >
+            <span class="text-sm text-gray-500"
+              >Inicia un chat, estamos aquí para ayudarte.</span
+            >
+          </div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
         <button
-          class="close-button"
+          class="absolute top-2 right-2 bg-transparent border-none text-[22px] font-bold cursor-pointer p-1 rounded-full w-[40px] h-[40px] flex items-center justify-center transition-colors duration-200 hover:bg-white/20"
           @click="handleClose"
           :style="{
             color: chatHeaderTextColor,
@@ -25,9 +37,8 @@
           ✕
         </button>
       </div>
-      <span class="font-extrabold bg-green-600">Prueba tailwind</span>
-      <div class="line-separate"></div>
-      <div class="chat-messages">
+      <div class="w-full h-[2px] bg-gray-200"></div>
+      <div class="flex flex-col flex-grow overflow-y-auto bg-transparent p-2">
         <ChatBubbleComponent
           :userMessageBackground="userMessageBackground"
           :userMessageTextColor="userMessageTextColor"
@@ -35,13 +46,17 @@
           :botMessageTextColor="botMessageTextColor"
         />
       </div>
-      <div class="chat-input" :style="{ backgroundColor: chatInputBackground }">
+      <div
+        class="flex gap-2 items-center p-2 min-h-[50px] bg-white"
+        :style="{ backgroundColor: chatInputBackground }"
+      >
         <textarea
           ref="textareaRef"
           type="text"
           v-model="message"
           placeholder="Empieza a preguntar..."
           @keyup.enter="sendMessage"
+          class="flex-grow min-h-[40px] max-h-[100px] p-2 outline-none bg-transparent resize-none border border-gray-300 rounded-lg text-[16px] text-gray-700"
           :style="{
             backgroundColor: chatInputBackground,
             color: chatInputTextColor,
@@ -49,7 +64,7 @@
           }"
         ></textarea>
         <button
-          class="send-button"
+          class="w-[50px] h-[50px] lg:hidden rounded-md bg-[#131844] text-white flex items-center justify-center transition-transform duration-200 hover:scale-105 hover:bg-[#1a205a]"
           @click="sendMessage"
           :style="{
             backgroundColor: sendButtonBackground,
@@ -66,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import SvgComponent from "./SvgComponent.vue";
 import ChatBubbleComponent from "./ChatBubbleComponent.vue";
 import { useChatMessages } from "../composable/useMessages";
@@ -155,7 +170,7 @@ const props = defineProps({
   },
   instanceName: {
     type: String,
-    default: "",
+    default: "Saguaro Drap",
   },
 });
 
@@ -167,6 +182,15 @@ const { addMessage } = useChatMessages();
 const message = ref("");
 const id = localStorage.getItem("userUUID");
 const filter = new Filter();
+
+// Enfocar el textarea cada vez que el panel se muestre
+watch(isVisible, (val) => {
+  if (val && textareaRef.value) {
+    setTimeout(() => {
+      textareaRef.value.focus();
+    }, 100);
+  }
+});
 
 const sendMessage = () => {
   const valueToSend = filter.clean(message.value.trim());
@@ -226,283 +250,27 @@ const handleClose = () => {
 </script>
 
 <style scoped>
-/* contenedor principal */
-.chat-panel {
-  position: absolute;
-  bottom: 80px;
-  left: 0;
-  height: 100vh; /* Esto se aplica primero */
-  height: 100dvh;
-  width: 100vw; /* Fallback para navegadores que no entienden dvw */
-  width: 100dvw;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  font-family: "Inter", "Segoe UI", "Open Sans", -apple-system,
-    BlinkMacSystemFont, sans-serif;
-  overflow: hidden;
-  margin: 0px;
-}
-
-@media (max-width: 1024px) {
-  .chat-panel {
-    width: 95vw;
-  }
-
-  .sub-head {
-    font-size: 1.5rem;
-  }
-}
-
-@media (min-width: 1025px) {
-  .chat-panel {
-    width: 25vw;
-    height: 70vh;
-  }
-
-  .sub-head {
-    font-size: 2rem;
-  }
-}
-
-/* --- Estilos para dispositivos móviles --- */
-@media (max-width: 768px) {
-  .chat-panel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-    margin: 0;
-    box-shadow: none;
-  }
-
-  /* .chat-header {
-    height: 20%;
-    position: relative;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-  } */
-
-  .close-button {
-    font-size: 22px;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .close-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
-  .chat-messages {
-    padding: 15px;
-  }
-
-  .chat-input {
-    padding: 15px 20px;
-    min-height: 60px;
-  }
-
-  textarea {
-    min-height: 50px;
-    font-size: 16px; /* Evita zoom en iOS */
-  }
-
-  .send-button {
-    width: 50px;
-    height: 50px;
-  }
-}
-
-/* encabezado saludo */
-
-.chat-header {
-  width: 100%;
-  height: 8%;
-  padding: 1px;
-  background-color: transparent;
-  font-family: "Inter", "Segoe UI", "Open Sans", -apple-system,
-    BlinkMacSystemFont, sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0px;
-  position: relative;
-}
-
-.header-content {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease;
-}
-
-.close-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.sub-head {
-  padding: 3px;
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-family: "Inter", "Segoe UI", "Open Sans", -apple-system,
-    BlinkMacSystemFont, sans-serif;
-}
-
-.header-subtitle {
-  padding: 3px;
-  font-size: 0.9rem;
-  opacity: 0.9;
-}
-
-/* Panel mensajes */
-
-.chat-messages {
-  flex-grow: 1;
-  overflow-y: auto;
-  background-color: transparent;
-  padding: 10px;
-}
-
-.message {
-  background-color: white;
-  padding: 12px 16px;
-  border-radius: 5px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  max-width: 80%;
-}
-
-.message p {
-  margin: 0px;
-  color: #4a4a4a;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.quick-replies {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.quick-reply-btn {
-  background-color: #e8f0fe;
-  color: #1a73e8;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.quick-reply-btn:hover {
-  background-color: #d2e3fc;
-}
-
-.chat-input {
-  padding: 10px;
-  display: flex;
-  gap: 10px;
-  min-height: 50px;
-  height: auto;
-  background-color: #fff;
-  align-items: center;
-}
-
-.send-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-  background-color: #131844;
-  color: white;
-  padding: 5px;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-
-.send-button:hover {
-  transform: scale(1.05);
-  background-color: #1a205a;
-}
-
-textarea {
-  flex-grow: 1;
-  height: auto;
-  min-height: 40px;
-  max-height: 100px;
-  padding: 8px 10px;
-  outline: none;
-  background-color: transparent;
-  resize: none;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  line-height: 1.4;
-  font-family: "Inter", "Segoe UI", "Open Sans", -apple-system,
-    BlinkMacSystemFont, sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  color: #474747;
-  overflow-y: auto;
-}
-
 /* Animaciones */
 .slide-fade-enter-active {
   transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform-origin: center;
 }
-
 .slide-fade-leave-active {
   transition: all 0.3s ease-in;
   transform-origin: center;
 }
-
 .slide-fade-enter-from {
   transform: scale(0);
   opacity: 0;
 }
-
 .slide-fade-enter-to {
   transform: scale(1);
   opacity: 1;
 }
-
 .slide-fade-leave-from {
   transform: scale(1);
   opacity: 1;
 }
-
 .slide-fade-leave-to {
   transform: scale(0.8);
   opacity: 0;

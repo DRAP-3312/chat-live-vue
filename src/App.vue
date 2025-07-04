@@ -370,6 +370,7 @@ onMounted(() => {
 
     <button
       ref="chatButtonRef"
+      v-if="!openChat"
       class="chat-button"
       @click="toggleChat"
       :class="{ active: openChat }"
