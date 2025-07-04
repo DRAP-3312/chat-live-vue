@@ -40,5 +40,6 @@ import "vue-chat-widget";
   svgName="helloSpan || headPhoneSpan || handshakeSpan || personHiSpan || ''"
   gaTrackingId="id"
   soundName="sound1 | sound2 | sound3 | sound4 | sound5"
+  instanceName="my proyect"
 ></vue-chat-widget>
 ```
