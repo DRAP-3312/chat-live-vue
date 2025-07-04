@@ -4,7 +4,7 @@ import FormComponent from "./components/FormComponent.vue";
 import SvgComponent from "./components/SvgComponent.vue";
 import { useSocketConnection } from "./composable/socket-connection";
 import { useChatMessages } from "./composable/useMessages";
-import './assets/style.css'
+import "./assets/style.css";
 import {
   initializeGoogleAnalytics,
   sendFlexibleEvent,
@@ -125,7 +125,6 @@ const props = defineProps({
   },
   instanceName: {
     type: String,
-    default: "Saguaro Drap",
   },
 });
 
