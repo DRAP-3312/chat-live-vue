@@ -2,34 +2,41 @@
   <Transition name="slide-fade">
     <div
       v-if="isVisible"
-      class="fixed inset-0 w-[100vw] h-[100dvh] rounded-none m-0 shadow-none flex flex-col overflow-hidden border border-gray-200 lg:relative lg:bottom-20 lg:left-0 lg:h-[80dvh] lg:w-[35vw] xl:w-[23vw] lg:rounded-[15px] lg:shadow-xl lg:m-0"
+      class="fixed inset-0 w-[100vw] h-[100dvh] rounded-none m-0 shadow-none flex flex-col overflow-hidden border border-gray-200 lg:relative lg:bottom-20 lg:left-0 lg:h-[80dvh] lg:w-[40vw] xl:w-[30vw] lg:rounded-[15px] lg:shadow-xl lg:m-0"
       :style="{ backgroundColor: chatPanelBackground }"
     >
       <div
-        class="flex p-2 w-full h-[10%] justify-center items-center relative font-sans"
+        class="flex p-2 w-full h-[10%] justify-between items-center relative font-sans"
         :style="{
           color: chatHeaderTextColor,
           backgroundColor: chatHeaderBackground,
         }"
       >
-        <div class="flex p-2 flex-grow gap-1 justify-around items-center">
-          <div class="w-12 h-12 bg-green-50 p-1 rounded-md">
-            <SvgComponent type="hi" :color="sendButtonBackground" />
-          </div>
+        <div
+          class="w-12 h-12 rounded-full overflow-hidden"
+          v-if="icon_button_url"
+        >
+          <!-- <SvgComponent type="hello" :color="sendButtonBackground" /> -->
+
+          <img
+            :src="icon_button_url ? icon_button_url : ''"
+            alt="img"
+            class="w-full h-full object-cover rounded-full"
+          />
+        </div>
+        <div class="flex p-2 flex-grow gap-1 items-center">
           <div
             class="flex flex-col justify-center items-start gap-1 font-sans"
             :style="{ color: chatHeaderTextColor }"
           >
-            <strong v-if="instanceName" class="text-md md:text-lg"
-              >Bienvenido a {{ instanceName }}</strong
-            >
-            <span class="text-sm md:text-base"
+            <div class="flex justify-center items-center gap-1 text-base">
+              <strong class="">Bienvenido a</strong>
+              <strong v-if="instanceName" class="">{{ instanceName }}</strong>
+            </div>
+            <span class="text-sm"
               >Inicia un chat, estamos aquí para ayudarte.</span
             >
           </div>
-          <div></div>
-          <div></div>
-          <div></div>
         </div>
         <button
           class="absolute top-2 right-2 bg-transparent border-none text-[22px] font-bold cursor-pointer p-1 rounded-full w-[40px] h-[40px] flex items-center justify-center transition-colors duration-200 hover:bg-white/20"
@@ -60,12 +67,16 @@
             >
               Compartir ubicación
             </button>
+
             <button
               v-if="!stateBtnAlerts"
               @click="handleAudioPermission"
-              class="flex justify-center items-center border border-purple-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-purple-600 flex-grow"
+              class="flex gap-1 justify-center items-center border border-purple-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-purple-600 flex-grow"
             >
-              Recibir alertas
+              <div class="w-8 h-8">
+                <SvgComponent :color="'#bbb'" type="alerts" />
+              </div>
+              <p>Recibir alertas</p>
             </button>
           </div>
         </div>
@@ -122,7 +133,7 @@ import { useSound } from "../composable/useSound";
 import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { Filter } from "bad-words";
 import { bad_words_spanish_list } from "../utils/bad-words-spanish";
-import { soundInstance } from '../composable/soundInstance';
+import { soundInstance } from "../composable/soundInstance";
 
 const props = defineProps({
   idAgent: {
@@ -204,6 +215,10 @@ const props = defineProps({
     default: "",
   },
   instanceName: {
+    type: String,
+    default: "Propiedades Cancún",
+  },
+  icon_button_url: {
     type: String,
   },
 });
