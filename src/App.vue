@@ -15,12 +15,10 @@ const props = defineProps({
   socketUrl: {
     type: String,
     required: true,
-    default: 'https://dev.milkyway.virture.io'
   },
   idAgent: {
     type: String,
     required: true,
-    default: '65d7a475abc4c71e14dee693'
   },
   api_key: {
     type: String,
@@ -29,8 +27,6 @@ const props = defineProps({
   nameSpace: {
     type: String,
     required: true,
-    default: 'chat',
-    default: '/chat'
   },
   gaTrackingId: {
     type: String,

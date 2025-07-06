@@ -2,7 +2,7 @@
   <Transition name="slide-fade">
     <div
       v-if="isVisible"
-      class="fixed inset-0 w-[100vw] h-[100dvh] rounded-none m-0 shadow-none flex flex-col overflow-hidden border border-gray-200 lg:relative lg:bottom-20 lg:left-0 lg:h-[80dvh] lg:w-[40vw] xl:w-[30vw] lg:rounded-[15px] lg:shadow-xl lg:m-0"
+      class="fixed inset-0 w-[100vw] h-[100dvh] rounded-none m-0 flex flex-col overflow-hidden lg:relative lg:bottom-20 lg:left-0 lg:h-[80dvh] lg:w-[40vw] xl:w-[30vw] lg:rounded-[12px] lg:shadow-xl lg:m-0"
       :style="{ backgroundColor: chatPanelBackground }"
     >
       <div
@@ -63,9 +63,13 @@
             <button
               v-if="!stateBtnUbication"
               @click="handleLocationPermission"
-              class="flex justify-center items-center border border-blue-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-blue-600 flex-grow"
+              class="flex gap-1 justify-center items-center border border-blue-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-blue-600 flex-grow"
             >
-              Compartir ubicación
+              <div class="w-8 h-8">
+                <SvgComponent type="ubication" :color="'#454545'" />
+              </div>
+
+              <p>Compartir ubicación</p>
             </button>
 
             <button
@@ -74,7 +78,7 @@
               class="flex gap-1 justify-center items-center border border-purple-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-purple-600 flex-grow"
             >
               <div class="w-8 h-8">
-                <SvgComponent :color="'#bbb'" type="alerts" />
+                <SvgComponent :color="'#454545'" type="alerts" />
               </div>
               <p>Recibir alertas</p>
             </button>
@@ -90,7 +94,7 @@
         />
       </div>
       <div
-        class="flex gap-2 items-center p-2 h-[10%] bg-white"
+        class="flex gap-2 items-center p-2 h-[10%]"
         :style="{ backgroundColor: chatInputBackground }"
       >
         <textarea
@@ -99,7 +103,7 @@
           v-model="message"
           placeholder="Empieza a preguntar..."
           @keyup.enter="handleEnterKey"
-          class="flex-grow min-h-[40px] max-h-[100px] p-2 outline-none bg-transparent resize-none border border-gray-300 rounded-lg text-[16px] text-gray-700"
+          class="flex-grow p-2 outline-none bg-transparent resize-none border border-gray-300 rounded-lg text-[16px] text-gray-700"
           :style="{
             backgroundColor: chatInputBackground,
             color: chatInputTextColor,
@@ -216,7 +220,6 @@ const props = defineProps({
   },
   instanceName: {
     type: String,
-    default: "Propiedades Cancún",
   },
   icon_button_url: {
     type: String,
