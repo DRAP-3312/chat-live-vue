@@ -18,6 +18,7 @@ export const get_utm = (url) => {
     "form",
     "gad_campaignid",
     "gad_source",
+    "zones"
   ];
 
   for (let index = 0; index < paramsToCapture.length; index++) {
