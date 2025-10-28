@@ -1,5 +1,5 @@
 <template>
-  <div ref="messagesContainer" class="messages-container">
+  <div ref="messagesContainer" class="messages-container hide-scrollbar">
     <div
       v-for="(item, index) in messages"
       :key="index"
@@ -153,20 +153,62 @@ watch(typingState, (newState) => {
 
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-  transition: all 0.3s ease-out; /* Duración y curva de la transición */
+  transition: all 0.3s ease-out;
 }
 
-.fade-slide-enter-from, /* Estado inicial al entrar */
+.fade-slide-enter-from,
 .fade-slide-leave-to {
-  /* Estado final al salir */
   opacity: 0;
-  transform: translateY(10px); /* Deslizarse hacia arriba/abajo */
+  transform: translateY(10px);
 }
 
-.fade-slide-enter-to, /* Estado final al entrar (por defecto si no se especifica) */
+.fade-slide-enter-to,
 .fade-slide-leave-from {
-  /* Estado inicial al salir (por defecto si no se especifica) */
   opacity: 1;
   transform: translateY(0);
+}
+
+/* scroool */
+/* Scrollbar oculto por defecto */
+.hide-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hide-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+/* Mostrar scrollbar al hacer hover */
+.hide-scrollbar:hover::-webkit-scrollbar {
+  opacity: 1;
+}
+
+.hide-scrollbar:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Para Firefox */
+.hide-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+.hide-scrollbar:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Para otros navegadores */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  overflow-y: scroll;
 }
 </style>

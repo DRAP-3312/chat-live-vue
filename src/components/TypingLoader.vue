@@ -8,18 +8,16 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex gap-2 p-1 text-gray-500 text-xs md:text-sm">
+  <div class="flex gap-2 p-3 text-gray-500 text-xs typing-wrapper">
     <span
-      class="flex flex-row items-center gap-1 min-w-0"
+      class="flex flex-row items-center gap-1 min-w-0 justify-center"
       v-if="props.instanceName"
     >
-      <span class="inline-block text-gray-500 truncate animate-color-pulse">
+      <span class="text-gray-500 truncate animate-color-pulse">
         {{ props.instanceName }}
       </span>
 
-      <span
-        class="inline-flex items-center whitespace-nowrap animate-color-pulse"
-      >
+      <span class="items-center whitespace-nowrap animate-color-pulse">
         está escribiendo
       </span>
 
@@ -121,5 +119,10 @@ const props = defineProps({
     transform: scale(0.5);
     opacity: 0.5;
   }
+}
+
+.typing-wrapper {
+  display: inline-flex;
+  white-space: nowrap;
 }
 </style>
