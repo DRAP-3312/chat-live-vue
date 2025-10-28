@@ -6,7 +6,7 @@ import { get_utm } from "./get_utm";
 import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { useSessionMetrics } from "./useSessionMetrics";
 import { areObjectsDeepEqual } from "./compare-objects";
-import { soundInstance } from './soundInstance';
+import { soundInstance } from "./soundInstance";
 
 export const useSocketConnection = (
   socketUrl,
@@ -23,8 +23,13 @@ export const useSocketConnection = (
   const metricsInterval = ref(null);
   const lastPath = ref("");
 
-  const { setValueMessages, addMessage, setCustomStyle, custom_style } =
-    useChatMessages();
+  const {
+    setValueMessages,
+    addMessage,
+    setCustomStyle,
+    custom_style,
+    setTypingStateWidget,
+  } = useChatMessages();
   const { playSound } = soundInstance;
   const { sessionInfo } = useSessionMetrics();
 
@@ -94,6 +99,10 @@ export const useSocketConnection = (
       sendFlexibleEvent(CHAT_EVENTS.SCHEDULED_APPOINTMENT, {
         chat_session_id: userUUID,
       });
+    });
+
+    socket.value.on("typing-state-widget", (stateWidget) => {
+      setTypingStateWidget(stateWidget);
     });
   };
 

@@ -91,6 +91,7 @@
           :userMessageTextColor="userMessageTextColor"
           :botMessageBackground="botMessageBackground"
           :botMessageTextColor="botMessageTextColor"
+          :instanceName="instanceName"
         />
       </div>
       <div

@@ -6,6 +6,7 @@ const custom_style = ref({});
 const closeModalOption = ref(false);
 const stateBtnAlerts = ref(false);
 const stateBtnUbication = ref(false);
+const typingState = ref("");
 
 export const useChatMessages = () => {
   const addMessage = (newMessage) => {
@@ -37,6 +38,8 @@ export const useChatMessages = () => {
     }
   };
 
+  const setTypingStateWidget = (state) => (typingState.value = state);
+
   const setStateBtnUbication = (val) => {
     stateBtnUbication.value = val;
     if (stateBtnAlerts.value && stateBtnUbication.value) {
@@ -46,6 +49,7 @@ export const useChatMessages = () => {
 
   return {
     messages,
+    typingState,
     addMessage,
     setValueMessages,
     openChat,
@@ -58,5 +62,6 @@ export const useChatMessages = () => {
     stateBtnUbication,
     setStateBtnAlert,
     setStateBtnUbication,
+    setTypingStateWidget,
   };
 };
