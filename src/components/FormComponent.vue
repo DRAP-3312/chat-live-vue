@@ -2,11 +2,11 @@
   <Transition name="slide-fade">
     <div
       v-if="isVisible"
-      class="fixed inset-0 w-[100vw] h-[100dvh] rounded-none m-0 flex flex-col overflow-hidden lg:relative lg:bottom-20 lg:left-0 lg:h-[80dvh] lg:w-[40vw] xl:w-[30vw] lg:rounded-[12px] lg:shadow-xl lg:m-0"
+      class="fixed inset-0 w-[100vw] h-[100dvh] rounded-none m-0 flex flex-col overflow-hidden text-xs font-sans lg:relative lg:bottom-20 lg:left-0 lg:h-[70dvh] lg:w-[35vw] xl:w-[23vw] xl:h-[68dvh] lg:rounded-[12px] lg:shadow-xl lg:m-0"
       :style="{ backgroundColor: chatPanelBackground }"
     >
       <div
-        class="flex p-2 w-full h-[10%] justify-between items-center relative font-sans"
+        class="flex p-2 w-full h-[10%] justify-between items-center relative"
         :style="{
           color: chatHeaderTextColor,
           backgroundColor: chatHeaderBackground,
@@ -16,8 +16,6 @@
           class="w-12 h-12 rounded-full overflow-hidden"
           v-if="icon_button_url"
         >
-          <!-- <SvgComponent type="hello" :color="sendButtonBackground" /> -->
-
           <img
             :src="icon_button_url ? icon_button_url : ''"
             alt="img"
@@ -26,29 +24,27 @@
         </div>
         <div class="flex p-2 flex-grow gap-1 items-center">
           <div
-            class="flex flex-col justify-center items-start gap-1 font-sans"
+            class="flex flex-col justify-center items-start gap-1"
             :style="{ color: chatHeaderTextColor }"
           >
-            <div class="flex justify-center items-center gap-1 text-base">
-              <strong class="">Bienvenido a</strong>
-              <strong v-if="instanceName" class="">{{ instanceName }}</strong>
+            <div class="flex justify-center items-center gap-1 text-sm">
+              <strong>Bienvenido a</strong>
+              <strong v-if="instanceName">{{ instanceName }}</strong>
             </div>
-            <span class="text-sm"
-              >Inicia un chat, estamos aquí para ayudarte.</span
-            >
+            <span class="text-xs">Inicia un chat, estamos aquí para ayudarte.</span>
           </div>
         </div>
         <button
           class="absolute top-2 right-2 bg-transparent border-none text-[22px] font-bold cursor-pointer p-1 rounded-full w-[40px] h-[40px] flex items-center justify-center transition-colors duration-200 hover:bg-white/20"
           @click="handleClose"
-          :style="{
-            color: chatHeaderTextColor,
-          }"
+          :style="{ color: chatHeaderTextColor }"
         >
           ✕
         </button>
       </div>
+
       <div class="w-full h-[2px] bg-gray-200"></div>
+
       <div class="w-full flex flex-col p-2" v-if="!closeModalOption">
         <div class="border border-gray-200 rounded-md hover:bg-gray-50">
           <div class="flex w-full justify-end items-center">
@@ -68,7 +64,6 @@
               <div class="w-8 h-8">
                 <SvgComponent type="ubication" :color="'#454545'" />
               </div>
-
               <p>Compartir ubicación</p>
             </button>
 
@@ -85,6 +80,7 @@
           </div>
         </div>
       </div>
+
       <div class="flex flex-col flex-grow overflow-y-auto bg-transparent p-2">
         <ChatBubbleComponent
           :userMessageBackground="userMessageBackground"
@@ -94,17 +90,17 @@
           :instanceName="instanceName"
         />
       </div>
+
       <div
         class="flex gap-2 items-center p-2 h-[10%]"
         :style="{ backgroundColor: chatInputBackground }"
       >
         <textarea
           ref="textareaRef"
-          type="text"
           v-model="message"
           placeholder="Empieza a preguntar..."
           @keyup.enter="handleEnterKey"
-          class="flex-grow p-2 outline-none bg-transparent resize-none border border-gray-300 rounded-lg text-[16px] text-gray-700"
+          class="flex-grow p-2 outline-none bg-transparent resize-none border border-gray-300 rounded-lg text-gray-700 text-xs"
           :style="{
             backgroundColor: chatInputBackground,
             color: chatInputTextColor,
@@ -116,9 +112,6 @@
           @click="sendMessage"
           :style="{
             backgroundColor: sendButtonBackground,
-            '&:hover': {
-              backgroundColor: sendButtonHoverBackground,
-            },
           }"
         >
           <SvgComponent type="sendBtn" />
