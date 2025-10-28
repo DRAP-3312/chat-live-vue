@@ -2,7 +2,7 @@
   <Transition name="slide-fade">
     <div
       v-if="isVisible"
-      class="fixed inset-0 w-[100vw] h-[100dvh] rounded-none m-0 flex flex-col overflow-hidden text-xs font-sans lg:relative lg:bottom-20 lg:left-0 lg:h-[70dvh] lg:w-[35vw] xl:w-[23vw] xl:h-[68dvh] lg:rounded-[12px] lg:shadow-xl lg:m-0"
+      class="fixed inset-0 w-[100vw] h-[100dvh] rounded-none m-0 flex flex-col overflow-hidden text-xs font-sans lg:relative lg:bottom-20 lg:left-0 lg:h-[70dvh] lg:w-[35vw] xl:w-[23vw] xl:h-[68dvh] lg:rounded-md lg:shadow-xl lg:m-0"
       :style="{ backgroundColor: chatPanelBackground }"
     >
       <div
@@ -31,7 +31,7 @@
               <strong>Bienvenido a</strong>
               <strong v-if="instanceName">{{ instanceName }}</strong>
             </div>
-            <span class="text-xs">Inicia un chat, estamos aquí para ayudarte.</span>
+            <span class="text-xs">Estamos aquí para ayudarte.</span>
           </div>
         </div>
         <button
@@ -98,14 +98,15 @@
         <textarea
           ref="textareaRef"
           v-model="message"
-          placeholder="Empieza a preguntar..."
+          placeholder="Enviar mensaje..."
           @keyup.enter="handleEnterKey"
-          class="flex-grow p-2 outline-none bg-transparent resize-none border border-gray-300 rounded-lg text-gray-700 text-xs"
+          class="flex-grow p-2 outline-none bg-transparent resize-none text-gray-700 text-xs border border-gray-200 rounded-md focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200 transition duration-150"
           :style="{
             backgroundColor: chatInputBackground,
             color: chatInputTextColor,
             borderColor: chatInputBorderColor,
           }"
+          @input="eventTextArea"
         ></textarea>
         <button
           class="w-[50px] h-[50px] lg:hidden rounded-md bg-[#131844] text-white flex items-center justify-center transition-transform duration-200 hover:scale-105 hover:bg-[#1a205a]"
@@ -127,7 +128,6 @@ import SvgComponent from "./SvgComponent.vue";
 import ChatBubbleComponent from "./ChatBubbleComponent.vue";
 import { useChatMessages } from "../composable/useMessages";
 import { useSessionMetrics } from "../composable/useSessionMetrics";
-import { useSound } from "../composable/useSound";
 import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { Filter } from "bad-words";
 import { bad_words_spanish_list } from "../utils/bad-words-spanish";
@@ -223,6 +223,7 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 const textareaRef = ref(null);
 const isVisible = ref(false);
+const typingUser = ref(false);
 const {
   addMessage,
   closeModalOption,
@@ -233,15 +234,33 @@ const {
   setStateBtnUbication,
 } = useChatMessages();
 
-// Importar composables de permisos
 const { requestLocationPermission } = useSessionMetrics();
 const { enableSound } = soundInstance;
 
 const message = ref("");
 const id = localStorage.getItem("userUUID");
 const filter = new Filter();
+let typingTimeout = null;
 
-// Enfocar el textarea cada vez que el panel se muestre
+//timer to typing state
+const eventTextArea = (event) => {
+  const input = event.target.value;
+
+  typingUser.value = input.trim() !== "";
+
+  if (typingTimeout) clearTimeout(typingTimeout);
+
+  typingTimeout = setTimeout(() => {
+    typingUser.value = false;
+  }, 1000);
+};
+
+watch(typingUser, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    props.socket.emit("typing-user-state", newVal);
+  }
+});
+
 watch(isVisible, (val) => {
   if (val && textareaRef.value) {
     setTimeout(() => {
