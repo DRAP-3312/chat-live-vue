@@ -97,10 +97,15 @@
       >
         <textarea
           ref="textareaRef"
+          :disabled="typingState === 'in-progress'"
           v-model="message"
-          placeholder="Enviar mensaje..."
+          :placeholder="
+            typingState === 'in-progress'
+              ? 'Esperando respuesta...'
+              : 'Enviar mensaje...'
+          "
           @keyup.enter="handleEnterKey"
-          class="flex-grow p-2 outline-none bg-transparent resize-none text-gray-700 text-xs border border-gray-200 rounded-md focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200 transition duration-150"
+          class="flex-grow p-2 outline-none resize-none text-gray-700 text-xs rounded-md transition duration-150 bg-transparent border border-gray-200 focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200"
           :style="{
             backgroundColor: chatInputBackground,
             color: chatInputTextColor,
@@ -227,6 +232,7 @@ const typingUser = ref(false);
 const {
   addMessage,
   closeModalOption,
+  typingState,
   onCloseModalOption,
   stateBtnAlerts,
   stateBtnUbication,
