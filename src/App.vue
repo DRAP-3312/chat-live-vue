@@ -421,6 +421,7 @@ onMounted(() => {
         :idAgent="props.idAgent"
         :api_key="props.api_key"
         :socket="chatSocket"
+        :sendMetricsNow="sendMetricsNow"
         :chatPanelBackground="
           custom_style.chatPanelBackground || chatPanelBackground
         "

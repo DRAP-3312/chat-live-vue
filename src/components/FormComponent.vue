@@ -162,6 +162,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  sendMetricsNow: {
+    type: Function,
+    required: true,
+  },
   chatPanelBackground: {
     type: String,
     default: "#ffffff",
@@ -350,6 +354,7 @@ const handleLocationPermission = async () => {
   try {
     await requestLocationPermission();
     setStateBtnUbication(true);
+    props.sendMetricsNow();
   } catch (error) {
     console.error("Error al solicitar permiso de ubicación:", error);
   }

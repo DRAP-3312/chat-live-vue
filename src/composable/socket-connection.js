@@ -137,15 +137,51 @@ export const useSocketConnection = (
     }, 1000);
   };
 
+  let lastMetrics = null;
+
+  const hasValidLocation = (location) => {
+    if (!location) return false;
+
+    if (location.latitude !== null && location.longitude !== null) {
+      return true;
+    }
+
+    const hasValidData =
+      (location.country && location.country !== "Unknown") ||
+      (location.city && location.city !== "Unknown") ||
+      (location.region && location.region !== "Unknown") ||
+      (location.timezone && location.timezone !== "Unknown");
+
+    return hasValidData;
+  };
+
+  const prepareMetrics = () => {
+    const metrics = {
+      idClient: getUserUUID(),
+      ...sessionInfo.value,
+    };
+
+    if (!hasValidLocation(metrics.clientLocation)) {
+      metrics.clientLocation = null;
+    }
+
+    return metrics;
+  };
+
   const setupMetricsTracking = () => {
-    let lastMetrics = null;
     metricsInterval.value = setInterval(() => {
-      const currentMetrics = { idClient: getUserUUID(), ...sessionInfo.value };
+      const currentMetrics = prepareMetrics();
       if (!areObjectsDeepEqual(lastMetrics, currentMetrics)) {
         socket.value?.emit("metrics-chat", currentMetrics);
         lastMetrics = currentMetrics;
       }
     }, 10000);
+  };
+
+  const sendMetricsNow = () => {
+    const currentMetrics = prepareMetrics();
+    socket.value?.emit("metrics-chat", currentMetrics);
+    lastMetrics = currentMetrics;
   };
 
   onMounted(() => {
@@ -178,6 +214,7 @@ export const useSocketConnection = (
   return {
     socket,
     manager,
+    sendMetricsNow,
   };
 };
 
