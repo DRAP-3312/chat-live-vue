@@ -1,19 +1,32 @@
 <template>
-  <div ref="messagesContainer" class="messages-container">
+  <div ref="messagesContainer" class="messages-container hide-scrollbar">
     <div
       v-for="(item, index) in messages"
       :key="index"
       :class="[
         'message',
-        item.role === 'user' ? 'message-sent' : 'message-received',
+
+        {
+          'message-sent': item.role === 'user',
+          'message-received': item.role === 'agent',
+        },
       ]"
       :style="{
-        backgroundColor: item.role === 'user' ? userMessageBackground : botMessageBackground,
-        color: item.role === 'user' ? userMessageTextColor : botMessageTextColor
+        backgroundColor:
+          item.role === 'user' ? userMessageBackground : botMessageBackground,
+        color:
+          item.role === 'user' ? userMessageTextColor : botMessageTextColor,
       }"
     >
       <ChatMessageContent :content="item.content" />
     </div>
+
+    <Transition name="fade-slide">
+      <TypingLoader
+        :instanceName="props.instanceName"
+        v-if="typingState === 'in-progress'"
+      />
+    </Transition>
   </div>
 </template>
 
@@ -21,32 +34,37 @@
 import { ref, onMounted, nextTick, watch } from "vue";
 import { useChatMessages } from "../composable/useMessages";
 import ChatMessageContent from "./ChatMessageContent.vue";
+import TypingLoader from "./TypingLoader.vue";
 
-const { messages } = useChatMessages();
+const { messages, typingState } = useChatMessages();
 const messagesContainer = ref(null);
 
 const props = defineProps({
   userMessageBackground: {
     type: String,
-    default: '#15be86'
+    default: "#15be86",
   },
   userMessageTextColor: {
     type: String,
-    default: '#ffffff'
+    default: "#ffffff",
   },
   botMessageBackground: {
     type: String,
-    default: '#f5f5f5'
+    default: "#f5f5f5",
   },
   botMessageTextColor: {
     type: String,
-    default: '#3f3f3f'
-  }
+    default: "#3f3f3f",
+  },
+  instanceName: {
+    type: String,
+    default: "",
+  },
 });
 
 const scrollToBottom = () => {
   nextTick(() => {
-    if (messagesContainer.value) {
+    if (messagesContainer.value || typingState.value) {
       setTimeout(() => {
         messagesContainer.value.scrollTop =
           messagesContainer.value.scrollHeight;
@@ -59,6 +77,11 @@ onMounted(scrollToBottom);
 
 // Observa los mensajes para hacer scroll
 watch(messages, scrollToBottom, { deep: true });
+watch(typingState, (newState) => {
+  if (newState === "in-progress") {
+    scrollToBottom();
+  }
+});
 </script>
 
 <style scoped>
@@ -126,5 +149,66 @@ watch(messages, scrollToBottom, { deep: true });
   .messages-container {
     padding: 5px;
   }
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* scroool */
+/* Scrollbar oculto por defecto */
+.hide-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hide-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+/* Mostrar scrollbar al hacer hover */
+.hide-scrollbar:hover::-webkit-scrollbar {
+  opacity: 1;
+}
+
+.hide-scrollbar:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Para Firefox */
+.hide-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+.hide-scrollbar:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Para otros navegadores */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  overflow-y: scroll;
 }
 </style>

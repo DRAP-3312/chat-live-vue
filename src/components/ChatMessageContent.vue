@@ -102,25 +102,26 @@ const formattedContent = computed(() => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.message-content {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* ====== Enlaces ====== */
 .message-content :deep(a) {
   color: #15be86;
   text-decoration: underline;
   word-break: break-all;
 }
 
-/* .message-content :deep(a:hover) {
-  opacity: 0.5;
-} */
-
-/* .message-content :deep(.image-container > a:hover) {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  opacity: 1;
-} */
-
-
+/* ====== Imágenes ====== */
 .message-content :deep(.image-container > a:hover img.chat-image) {
   transform: scale(1.02);
-  filter: brightness(65%)
+  filter: brightness(65%);
 }
 
 .message-content :deep(strong) {
@@ -162,6 +163,7 @@ const formattedContent = computed(() => {
   border-radius: 8px;
 }
 
+/* ====== Link preview ====== */
 .message-content :deep(.link-preview) {
   margin: 8px 0;
   width: 100%;

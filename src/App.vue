@@ -121,6 +121,7 @@ const props = defineProps({
   },
   instanceName: {
     type: String,
+    default: ''
   },
 });
 
@@ -263,7 +264,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="chat-container" :class="{ 'chat-open': openChat }">
+  <div class="chat-container text-sm" :class="{ 'chat-open': openChat }">
     <transition name="typing-fade">
       <div
         v-if="showTypingIndicator"
@@ -473,6 +474,11 @@ onMounted(() => {
 @tailwind utilities;
 :host {
   display: block;
+}
+
+.text-sm {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
 }
 
 .chat-container {
