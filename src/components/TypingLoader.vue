@@ -9,60 +9,65 @@ const props = defineProps({
 
 <template>
   <div class="flex gap-2 p-3 text-gray-500 text-xs typing-wrapper">
-    <span
-      class="flex flex-row items-center gap-1 min-w-0 justify-center"
+    <div
+      class="flex flex-row items-center gap-2 min-w-0 justify-center"
       v-if="props.instanceName"
     >
-      <span class="text-gray-500 truncate animate-color-pulse">
+      <span class="text-gray-600 truncate font-medium">
         {{ props.instanceName }}
       </span>
 
-      <span class="items-center whitespace-nowrap animate-color-pulse">
-        está escribiendo<span class="dots"></span>
+      <span class="items-center whitespace-nowrap text-gray-500">
+        está escribiendo
       </span>
-    </span>
+
+      <!-- Dots con animación de ola -->
+      <span class="typing-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </span>
+    </div>
   </div>
 </template>
 
 <style scoped>
-@keyframes color-pulse {
-  0%,
-  100% {
-    color: #4b5563;
-  }
-  50% {
-    color: #9ca3af;
-  }
+/* Animación de ola en los puntos */
+.typing-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 1em;
 }
 
-.animate-color-pulse {
-  animation: color-pulse 1.5s ease-in-out infinite;
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #9ca3af;
+  animation: wave 1.4s ease-in-out infinite;
 }
 
-/* --- dots animations --- */
-.dots::after {
-  content: "";
-  display: inline-block;
-  width: 1em;
-  text-align: left;
-  animation: dots steps(4, end) 1.2s infinite;
+.dot:nth-child(1) {
+  animation-delay: 0s;
 }
 
-@keyframes dots {
-  0% {
-    content: "";
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes wave {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
   }
-  25% {
-    content: ".";
-  }
-  50% {
-    content: "..";
-  }
-  75% {
-    content: "...";
-  }
-  100% {
-    content: "";
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
   }
 }
 </style>
