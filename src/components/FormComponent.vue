@@ -46,24 +46,16 @@
       <div class="w-full h-[2px] bg-gray-200"></div>
 
       <div class="w-full flex flex-col p-2" v-if="!closeModalOption">
-        <div class="border border-gray-200 rounded-md hover:bg-gray-50">
-          <div class="flex w-full justify-end items-center">
-            <button
-              @click="onCloseModalOption"
-              class="hover:bg-gray-200 text-lg rounded-full w-8 h-8 justify-center items-center"
-            >
-              x
-            </button>
-          </div>
-          <div class="flex gap-1 p-2">
+        <div
+          class="border border-gray-200 rounded-md hover:bg-gray-50 flex gap-1 justify-between items-start shadow-lg"
+        >
+          <div class="flex gap-1 p-2 w-full">
             <button
               v-if="!stateBtnUbication"
               @click="handleLocationPermission"
               class="flex gap-1 justify-center items-center border border-blue-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-blue-600 flex-grow"
             >
-              <div class="w-8 h-8">
-                <SvgComponent type="ubication" :color="'#454545'" />
-              </div>
+              <p class="text-lg">📍</p>
               <p>Compartir ubicación</p>
             </button>
 
@@ -72,16 +64,24 @@
               @click="handleAudioPermission"
               class="flex gap-1 justify-center items-center border border-purple-500 text-gray-600 hover:text-white px-3 py-1 rounded-md hover:bg-purple-600 flex-grow"
             >
-              <div class="w-8 h-8">
-                <SvgComponent :color="'#454545'" type="alerts" />
-              </div>
+              <p class="text-lg">🔊</p>
               <p>Recibir alertas</p>
+            </button>
+          </div>
+          <div class="flex justify-end items-center">
+            <button
+              @click="onCloseModalOption"
+              class="hover:bg-gray-200 text-lg rounded-md w-8 h-8 justify-center items-center"
+            >
+              x
             </button>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-col flex-grow overflow-y-auto bg-transparent p-2">
+      <div
+        class="flex flex-col flex-grow overflow-y-auto bg-transparent p-2 relative"
+      >
         <ChatBubbleComponent
           :userMessageBackground="userMessageBackground"
           :userMessageTextColor="userMessageTextColor"
@@ -92,36 +92,42 @@
       </div>
 
       <div
-        class="flex gap-2 items-center p-2 h-[10%]"
+        class="flex flex-col h-[10%]"
         :style="{ backgroundColor: chatInputBackground }"
       >
-        <textarea
-          ref="textareaRef"
-          :disabled="typingState === 'in-progress'"
-          v-model="message"
-          :placeholder="
-            typingState === 'in-progress'
-              ? 'Esperando respuesta...'
-              : 'Enviar mensaje...'
-          "
-          @keyup.enter="handleEnterKey"
-          class="flex-grow p-2 outline-none resize-none text-gray-700 text-xs rounded-md transition duration-150 bg-transparent border border-gray-200 focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200"
-          :style="{
-            backgroundColor: chatInputBackground,
-            color: chatInputTextColor,
-            borderColor: chatInputBorderColor,
-          }"
-          @input="eventTextArea"
-        ></textarea>
-        <button
-          class="w-[50px] h-[50px] lg:hidden rounded-md bg-[#131844] text-white flex items-center justify-center transition-transform duration-200 hover:scale-105 hover:bg-[#1a205a]"
-          @click="sendMessage"
-          :style="{
-            backgroundColor: sendButtonBackground,
-          }"
-        >
-          <SvgComponent type="sendBtn" />
-        </button>
+        <Transition name="fade-slide" mode="out-in">
+          <div
+            v-if="typingState === 'in-progress'"
+            key="typing"
+            class="flex items-center h-full w-full p-2"
+          >
+            <TypingLoader :instanceName="props.instanceName" />
+          </div>
+          <div v-else key="input" class="flex gap-2 items-center p-2 h-full">
+            <textarea
+              ref="textareaRef"
+              v-model="message"
+              placeholder="Enviar mensaje..."
+              @keyup.enter="handleEnterKey"
+              class="flex-grow p-2 outline-none resize-none text-gray-700 text-xs rounded-md transition duration-150 bg-transparent border border-gray-200 focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200"
+              :style="{
+                backgroundColor: chatInputBackground,
+                color: chatInputTextColor,
+                borderColor: chatInputBorderColor,
+              }"
+              @input="eventTextArea"
+            ></textarea>
+            <button
+              class="w-[50px] h-[50px] lg:hidden rounded-md bg-[#131844] text-white flex items-center justify-center transition-transform duration-200 hover:scale-105 hover:bg-[#1a205a]"
+              @click="sendMessage"
+              :style="{
+                backgroundColor: sendButtonBackground,
+              }"
+            >
+              <SvgComponent type="sendBtn" />
+            </button>
+          </div>
+        </Transition>
       </div>
     </div>
   </Transition>
@@ -137,6 +143,7 @@ import { sendFlexibleEvent, CHAT_EVENTS } from "../utils/dataLayer";
 import { Filter } from "bad-words";
 import { bad_words_spanish_list } from "../utils/bad-words-spanish";
 import { soundInstance } from "../composable/soundInstance";
+import TypingLoader from "./TypingLoader.vue";
 
 const props = defineProps({
   idAgent: {
@@ -387,5 +394,24 @@ const handleAudioPermission = () => {
   width: 100%;
   height: 2px;
   background-color: rgb(228, 229, 231);
+}
+
+/* typing */
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

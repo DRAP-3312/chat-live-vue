@@ -20,13 +20,6 @@
     >
       <ChatMessageContent :content="item.content" />
     </div>
-
-    <Transition name="fade-slide">
-      <TypingLoader
-        :instanceName="props.instanceName"
-        v-if="typingState === 'in-progress'"
-      />
-    </Transition>
   </div>
 </template>
 
@@ -34,7 +27,6 @@
 import { ref, onMounted, nextTick, watch } from "vue";
 import { useChatMessages } from "../composable/useMessages";
 import ChatMessageContent from "./ChatMessageContent.vue";
-import TypingLoader from "./TypingLoader.vue";
 
 const { messages, typingState } = useChatMessages();
 const messagesContainer = ref(null);
@@ -149,23 +141,6 @@ watch(typingState, (newState) => {
   .messages-container {
     padding: 5px;
   }
-}
-
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.3s ease-out;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.fade-slide-enter-to,
-.fade-slide-leave-from {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* scroool */
