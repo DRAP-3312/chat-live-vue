@@ -82,6 +82,27 @@
       <div
         class="flex flex-col flex-grow overflow-y-auto bg-transparent p-2 relative"
       >
+        <!-- Feedback de ubicación compartida -->
+        <Transition name="feedback-fade">
+          <div
+            v-if="showLocationFeedback"
+            class="feedback-message bg-green-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center gap-2 animate-bounce-subtle whitespace-nowrap"
+          >
+            <span class="text-lg">✓</span>
+            <span class="font-medium">¡Gracias por compartir tu ubicación!</span>
+          </div>
+        </Transition>
+
+        <!-- Feedback de sonido activado -->
+        <Transition name="feedback-fade">
+          <div
+            v-if="showSoundFeedback"
+            class="feedback-message bg-purple-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center gap-2 animate-bounce-subtle whitespace-nowrap"
+          >
+            <span class="text-lg">✓</span>
+            <span class="font-medium">Notificaciones activadas</span>
+          </div>
+        </Transition>
         <ChatBubbleComponent
           :userMessageBackground="userMessageBackground"
           :userMessageTextColor="userMessageTextColor"
@@ -240,6 +261,9 @@ const emit = defineEmits(["close"]);
 const textareaRef = ref(null);
 const isVisible = ref(false);
 const typingUser = ref(false);
+const showLocationFeedback = ref(false);
+const showSoundFeedback = ref(false);
+
 const {
   addMessage,
   closeModalOption,
@@ -355,6 +379,12 @@ const handleLocationPermission = async () => {
     await requestLocationPermission();
     setStateBtnUbication(true);
     props.sendMetricsNow();
+
+    // Mostrar feedback de agradecimiento
+    showLocationFeedback.value = true;
+    setTimeout(() => {
+      showLocationFeedback.value = false;
+    }, 3000);
   } catch (error) {
     console.error("Error al solicitar permiso de ubicación:", error);
   }
@@ -363,6 +393,12 @@ const handleLocationPermission = async () => {
 const handleAudioPermission = () => {
   enableSound();
   setStateBtnAlert(true);
+
+  // Mostrar feedback de confirmación
+  showSoundFeedback.value = true;
+  setTimeout(() => {
+    showSoundFeedback.value = false;
+  }, 3000);
 };
 </script>
 
@@ -394,6 +430,53 @@ const handleAudioPermission = () => {
 .slide-fade-leave-to {
   transform: scale(0.8);
   opacity: 0;
+}
+
+/* Estilo del mensaje de feedback */
+.feedback-message {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+}
+
+/* Animación de feedback */
+.feedback-fade-enter-active {
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+.feedback-fade-leave-active {
+  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+}
+.feedback-fade-enter-from {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.9);
+}
+.feedback-fade-enter-to {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+.feedback-fade-leave-from {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+.feedback-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.9);
+}
+
+/* Animación sutil de bounce - usa margin en lugar de transform */
+@keyframes bounce-subtle {
+  0%, 100% {
+    margin-top: 0;
+  }
+  50% {
+    margin-top: -3px;
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 0.6s ease-in-out;
 }
 .line-separate {
   width: 100%;

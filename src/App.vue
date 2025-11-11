@@ -121,7 +121,7 @@ const props = defineProps({
   },
   instanceName: {
     type: String,
-    default: ''
+    default: "",
   },
 });
 
@@ -131,7 +131,7 @@ const showTypingIndicator = ref(false);
 const { openChat, setValueOpenChat, custom_style } = useChatMessages();
 
 // Inicializar la conexión del socket
-const { socket: chatSocket } = useSocketConnection(
+const { socket: chatSocket, sendMetricsNow } = useSocketConnection(
   props.socketUrl,
   props.idAgent,
   props.api_key,
