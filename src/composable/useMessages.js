@@ -47,6 +47,19 @@ export const useChatMessages = () => {
     }
   };
 
+  const deleteMessages = (messageIds) => {
+    if (!Array.isArray(messageIds)) {
+      return;
+    }
+
+    messages.value = messages.value.map((msg) => {
+      if (messageIds.includes(msg._id)) {
+        return { ...msg, deleteMarker: true };
+      }
+      return msg;
+    });
+  };
+
   return {
     messages,
     typingState,
@@ -63,5 +76,6 @@ export const useChatMessages = () => {
     setStateBtnAlert,
     setStateBtnUbication,
     setTypingStateWidget,
+    deleteMessages,
   };
 };

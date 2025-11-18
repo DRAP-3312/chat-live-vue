@@ -29,6 +29,7 @@ export const useSocketConnection = (
     setCustomStyle,
     custom_style,
     setTypingStateWidget,
+    deleteMessages,
   } = useChatMessages();
   const { playSound } = soundInstance;
   const { sessionInfo } = useSessionMetrics();
@@ -103,6 +104,10 @@ export const useSocketConnection = (
 
     socket.value.on("typing-state-widget", (stateWidget) => {
       setTypingStateWidget(stateWidget);
+    });
+
+    socket.value.on("delete-message", (messageIds) => {
+      deleteMessages(messageIds);
     });
   };
 
