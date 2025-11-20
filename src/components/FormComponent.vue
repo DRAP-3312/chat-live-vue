@@ -130,7 +130,7 @@
               v-model="message"
               placeholder="Enviar mensaje..."
               @keyup.enter="handleEnterKey"
-              class="flex-grow p-2 outline-none resize-none text-gray-700 text-xs rounded-md transition duration-150 bg-transparent border border-gray-200 focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200"
+              class="flex-grow p-2 outline-none resize-none text-gray-700 text-base  lg:text-xs rounded-md transition duration-150 bg-transparent border border-gray-200 focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200"
               :style="{
                 backgroundColor: chatInputBackground,
                 color: chatInputTextColor,
