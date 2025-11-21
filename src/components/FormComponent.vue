@@ -89,7 +89,9 @@
             class="feedback-message bg-green-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center gap-2 animate-bounce-subtle whitespace-nowrap"
           >
             <span class="text-lg">✓</span>
-            <span class="font-medium">¡Gracias por compartir tu ubicación!</span>
+            <span class="font-medium"
+              >¡Gracias por compartir tu ubicación!</span
+            >
           </div>
         </Transition>
 
@@ -130,7 +132,7 @@
               v-model="message"
               placeholder="Enviar mensaje..."
               @keyup.enter="handleEnterKey"
-              class="flex-grow p-2 outline-none resize-none text-gray-700 text-base  lg:text-xs rounded-md transition duration-150 bg-transparent border border-gray-200 focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200"
+              class="flex-grow p-2 outline-none resize-none text-gray-700 text-base lg:text-xs rounded-md transition duration-150 bg-transparent border border-gray-200 focus-within:border-gray-200 focus-within:ring-1 focus-within:ring-gray-200"
               :style="{
                 backgroundColor: chatInputBackground,
                 color: chatInputTextColor,
@@ -265,6 +267,7 @@ const showLocationFeedback = ref(false);
 const showSoundFeedback = ref(false);
 
 const {
+  messages,
   addMessage,
   closeModalOption,
   typingState,
@@ -314,6 +317,10 @@ const sendMessage = () => {
   const valueToSend = filter.clean(message.value.trim());
   const utms = JSON.parse(localStorage.getItem("utm_obj"));
   if (valueToSend && props.socket) {
+    const hasClientMessages = messages.value.some(
+      (msg) => msg.role === "user" && !msg.deleteMarker
+    );
+
     const form = {
       content: valueToSend,
       role: "user",
@@ -338,6 +345,13 @@ const sendMessage = () => {
       chat_message_type: "text",
     };
     sendFlexibleEvent(CHAT_EVENTS.MESSAGE_SENT_CLIENT, data);
+
+    // Enviar SESSION_STARTED solo si es el primer mensaje del cliente
+    if (!hasClientMessages) {
+      sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
+        chat_session_id: id,
+      });
+    }
 
     message.value = "";
   }
@@ -467,7 +481,8 @@ const handleAudioPermission = () => {
 
 /* Animación sutil de bounce - usa margin en lugar de transform */
 @keyframes bounce-subtle {
-  0%, 100% {
+  0%,
+  100% {
     margin-top: 0;
   }
   50% {

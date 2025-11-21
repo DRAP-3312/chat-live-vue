@@ -73,10 +73,6 @@ export const useSocketConnection = (
           }
         }
       );
-
-      sendFlexibleEvent(CHAT_EVENTS.SESSION_STARTED, {
-        chat_session_id: userUUID,
-      });
     });
 
     socket.value.on("disconnect", () => {});
