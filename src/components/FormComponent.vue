@@ -330,11 +330,8 @@ const sendMessage = () => {
     props.socket.emit(
       "send-chat-message",
       {
-        userUUID: id ?? "",
         message: valueToSend,
-        agentId: props.idAgent,
-        api_key: props.api_key,
-        utms,
+        messageType: 'text'
       },
       (val) => {}
     );

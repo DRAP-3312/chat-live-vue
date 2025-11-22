@@ -46,33 +46,38 @@ export const useSocketConnection = (
 
   const initializeSocket = () => {
     const userUUID = getUserUUID();
-    const idThread = userUUID;
+    const platform = "chat";
+
+    const credentialsArray = [userUUID, idAgent, api_key, platform];
+    const credentialsJsonString = JSON.stringify(credentialsArray);
 
     manager.value = new Manager(socketUrl, {
       transports: ["websocket", "polling"],
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
-      query: {
-        idOwner: userUUID,
-        api_key: api_key,
-        idClient: userUUID,
-        instance: idAgent,
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            "x-client-credentials": credentialsJsonString,
+          },
+        },
       },
     });
 
-    socket.value = manager.value.socket(nameSpace);
+    socket.value = manager.value.socket(nameSpace, {
+      auth: {
+        credentials: credentialsJsonString,
+      },
+    });
 
     socket.value.on("connect", () => {
-      socket.value.emit(
-        "connected-chat",
-        { userUUID: idThread, agentId: idAgent },
-        (val) => {
-          if (val.messages) {
-            setValueMessages(val.messages);
-          }
+      const utms = JSON.parse(localStorage.getItem("utm_obj"));
+      socket.value.emit("connected-chat", utms, (val) => {
+        if (val) {
+          setValueMessages(val);
         }
-      );
+      });
     });
 
     socket.value.on("disconnect", () => {});
@@ -130,7 +135,7 @@ export const useSocketConnection = (
 
   const setupWidgetConfig = () => {
     widgetInterval.value = setInterval(() => {
-      socket.value?.emit("get-custom-widget", idAgent, (val) => {
+      socket.value?.emit("get-custom-widget", (val) => {
         if (!haveSameValues(val, custom_style.value)) {
           setCustomStyle({ ...val });
         }
@@ -189,8 +194,8 @@ export const useSocketConnection = (
     const currentUrl = window.location.href;
     get_utm(currentUrl);
     initializeSocket();
-    setupNavigationTracking();
     setupWidgetConfig();
+    setupNavigationTracking();
     setupMetricsTracking();
   });
 
