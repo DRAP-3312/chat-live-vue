@@ -15,18 +15,22 @@ const props = defineProps({
   socketUrl: {
     type: String,
     required: true,
+    default: 'http://localhost:7777'
   },
   idAgent: {
     type: String,
     required: true,
+    default: '65d7a475abc4c71e14dee693'
   },
   api_key: {
     type: String,
     required: true,
+    default: 'api'
   },
   nameSpace: {
     type: String,
     required: true,
+    default: '/conversation'
   },
   gaTrackingId: {
     type: String,
@@ -121,7 +125,7 @@ const props = defineProps({
   },
   instanceName: {
     type: String,
-    default: "",
+    default: "Dev V2",
   },
 });
 
